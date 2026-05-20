@@ -10,7 +10,7 @@ import {
 const items = [
   { href: "/tablero", label: "Tablero", icon: LayoutDashboard, disabled: true },
   { href: "/propiedades", label: "Propiedades", icon: Building2, disabled: false },
-  { href: "/leads", label: "Leads", icon: Users, disabled: true },
+  { href: "/leads", label: "Leads", icon: Users, disabled: false },
   { href: "/agenda", label: "Agenda", icon: Calendar, disabled: true },
   { href: "/reportes", label: "Reportes", icon: FileText, disabled: true },
 ];
