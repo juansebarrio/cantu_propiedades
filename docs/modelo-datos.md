@@ -7,7 +7,7 @@
 ### Propiedad
 Una unidad publicada (en alquiler o venta).
 - `id`, `direccion`, `tipo` (depto / casa / local / etc), `operacion` (alquiler / venta / temporada)
-- `dueño_id` → Dueño
+- `dueno_id` → Dueño
 - `estado` (captada / publicada / con_visitas / con_oferta / reservada / cerrada / pausada)
 - `precio`, `moneda`
 - `fotos`, `descripcion_comercial`

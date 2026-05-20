@@ -16,42 +16,39 @@ Construido por **JS80 · Estudio de soluciones digitales**.
 - **Backend:** Supabase (Postgres + Auth + RLS)
 - **Mensajería:** WhatsApp Business API (Cloud API de Meta)
 - **Mail:** Resend
-- **PDFs:** WeasyPrint (Python, basado en el sistema de propuestas de JS80)
+- **PDFs:** WeasyPrint (Python · reutilizado del sistema de propuestas JS80)
 - **Hosting:** Vercel
 
 ## Estructura
 
-```
-app/         · Next.js App Router · pantallas y API routes
-components/  · UI reutilizable
-lib/         · Lógica de negocio (no-UI): clientes Supabase, wrappers de servicios
-supabase/    · Migrations y seed
-reportes/    · Generador Python de PDFs mensuales
-docs/        · Toda la documentación viva del proyecto
-design/      · Identidad, wireframes, mockups
-```
+- `app/` · Next.js App Router · pantallas y API routes
+- `components/` · UI reutilizable
+- `lib/` · Lógica de negocio · clientes Supabase, wrappers de servicios
+- `supabase/` · Migrations y seed
+- `reportes/` · Generador Python de PDFs mensuales
+- `docs/` · Documentación viva del proyecto
+- `design/` · Identidad, wireframes, mockups
 
 ## Arrancar en local
 
-> Pendiente · se completa después de inicializar Next.js y Supabase CLI.
-
 ```bash
-# pnpm install
-# cp .env.example .env.local  → completar con credenciales reales (ver docs/credenciales.md)
-# pnpm dev
+pnpm install
+cp .env.example .env.local   # completar con credenciales locales
+pnpm db:start                # arranca Supabase en Docker
+pnpm dev                     # arranca Next en localhost:3000
 ```
 
 ## Documentación
 
-- [`docs/brief.md`](docs/brief.md) · brief original del cliente
-- [`docs/modelo-datos.md`](docs/modelo-datos.md) · esquema de datos
-- [`docs/decisiones.md`](docs/decisiones.md) · log de decisiones técnicas
-- [`docs/runbook.md`](docs/runbook.md) · operación: deploy, backups, restore
-- [`docs/handover.md`](docs/handover.md) · documento de entrega al cliente
+- `docs/brief.md` · brief original del cliente
+- `docs/modelo-datos.md` · esquema de datos
+- `docs/decisiones.md` · log de decisiones técnicas
+- `docs/runbook.md` · operación: deploy, backups, restore
+- `docs/handover.md` · documento de entrega al cliente
 
 ## Equipo
 
-- **Juan Segundo Barrio** · diseño, desarrollo, contacto con cliente · contacto@js80.studio
+- **Juan Segundo Barrio** · diseño, desarrollo, contacto · contacto@js80.studio
 - **Julián Sancholuz** · diseño, desarrollo
 
 ---
