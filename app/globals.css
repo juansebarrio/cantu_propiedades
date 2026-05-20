@@ -3,6 +3,62 @@
 @tailwind utilities;
 
 :root {
-  --font-inter: "Inter", system-ui, sans-serif;
-  --font-fraunces: "Fraunces", serif;
+  /* Ink scale · warm near-black neutrals */
+  --ink-900: #1A1814;
+  --ink-800: #26221C;
+  --ink-700: #3A352D;
+  --ink-600: #524B40;
+  --ink-500: #6B6358;
+  --ink-400: #8A8276;
+  --ink-300: #ABA295;
+  --ink-200: #CFC7BB;
+  --ink-100: #E5DFD4;
+  --ink-50:  #EFEAE0;
+
+  /* Cream scale · paper / off-white */
+  --cream-50:  #FAF6EE;
+  --cream-100: #F5EFE3;
+  --cream-200: #EBE3D2;
+  --cream-300: #DBD0B8;
+  --cream-400: #C7BA9C;
+
+  /* Brick · único acento vibrante */
+  --brick-50:  #F7E9DF;
+  --brick-100: #EFD0BC;
+  --brick-200: #E2A989;
+  --brick-300: #D08760;
+  --brick-500: #BD5E37;
+  --brick-600: #9E4B27;
+  --brick-700: #7E3B1E;
+
+  /* Semánticos · sobrios, nunca neón */
+  --green-50:  #E8EFE3;
+  --green-500: #4A6B3E;
+  --amber-50:  #F4ECD6;
+  --amber-500: #8C6A1E;
+  --plum-50:   #ECE5EC;
+  --plum-500:  #5E4459;
+  --slate-50:  #E5E9EC;
+  --slate-500: #46596A;
+
+  /* Radii · restrained, nunca pill (salvo badges) */
+  --radius-xs: 3px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  /* Shadows · casi planas · border-first */
+  --shadow-sm: 0 1px 2px rgba(26,24,20,.06), 0 0 0 1px rgba(26,24,20,.04);
+  --shadow-md: 0 2px 8px rgba(26,24,20,.07), 0 0 0 1px rgba(26,24,20,.05);
+  --shadow-lg: 0 8px 28px rgba(26,24,20,.10), 0 0 0 1px rgba(26,24,20,.06);
+}
+
+/* Tabular nums por default en clase .num · útil para precios, días, etc */
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Body por default */
+body {
+  font-feature-settings: "ss01" on, "cv11" on;
 }

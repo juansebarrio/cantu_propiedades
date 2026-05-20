@@ -2,49 +2,108 @@ import { clsx } from "clsx";
 import { HTMLAttributes } from "react";
 
 type Tone =
-  | "neutral"
+  | "slate"
+  | "amber"
+  | "plum"
+  | "brick"
+  | "cream"
   | "green"
+  | "ink"
+  // Aliases legacy · serán removidos en Vuelta 3
+  | "neutral"
   | "yellow"
+  | "violet"
   | "orange"
   | "red"
-  | "blue"
-  | "violet";
+  | "blue";
 
-const tones: Record<Tone, string> = {
-  neutral: "bg-line/40 text-ink/70",
-  green: "bg-green-100 text-green-800",
-  yellow: "bg-yellow-100 text-yellow-800",
-  orange: "bg-orange-100 text-orange-800",
-  red: "bg-red-100 text-red-800",
-  blue: "bg-blue-100 text-blue-800",
-  violet: "bg-violet-100 text-violet-800",
+const tones: Record<
+  Exclude<Tone, "neutral" | "yellow" | "violet" | "orange" | "red" | "blue">,
+  { bg: string; fg: string }
+> = {
+  slate: { bg: "bg-slate-50", fg: "text-slate-500" },
+  amber: { bg: "bg-amber-50", fg: "text-amber-500" },
+  plum: { bg: "bg-plum-50", fg: "text-plum-500" },
+  brick: { bg: "bg-brick-50", fg: "text-brick-700" },
+  cream: { bg: "bg-cream-200", fg: "text-ink-700" },
+  green: { bg: "bg-green-50", fg: "text-green-500" },
+  ink: { bg: "bg-ink-800", fg: "text-cream-100" },
 };
 
-type Props = HTMLAttributes<HTMLSpanElement> & { tone?: Tone };
+const legacyAliases: Record<
+  "neutral" | "yellow" | "violet" | "orange" | "red" | "blue",
+  keyof typeof tones
+> = {
+  neutral: "slate",
+  yellow: "amber",
+  violet: "plum",
+  orange: "brick",
+  red: "brick",
+  blue: "slate",
+};
 
-export function Badge({ tone = "neutral", className, ...props }: Props) {
+type Props = HTMLAttributes<HTMLSpanElement> & {
+  tone?: Tone;
+  dot?: boolean;
+};
+
+export function Badge({
+  tone = "slate",
+  dot = true,
+  className,
+  children,
+  ...props
+}: Props) {
+  const resolved = (
+    tone in tones ? tone : legacyAliases[tone as keyof typeof legacyAliases]
+  ) as keyof typeof tones;
+  const t = tones[resolved];
+
   return (
     <span
       className={clsx(
-        "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
-        tones[tone],
+        "inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5",
+        "whitespace-nowrap text-[11px] font-medium tracking-tight",
+        t.bg,
+        t.fg,
         className,
       )}
       {...props}
-    />
+    >
+      {dot && (
+        <span
+          className="h-[5px] w-[5px] rounded-full opacity-50"
+          style={{ background: "currentColor" }}
+        />
+      )}
+      {children}
+    </span>
   );
 }
 
 export function tonoParaEstado(estado: string): Tone {
   const map: Record<string, Tone> = {
-    captada: "neutral",
+    // Propiedades
+    captada: "cream",
     publicada: "green",
-    con_visitas: "blue",
-    con_oferta: "orange",
-    reservada: "violet",
-    cerrada: "neutral",
-    pausada: "yellow",
-    archivada: "neutral",
+    con_visitas: "slate",
+    con_oferta: "brick",
+    reservada: "plum",
+    cerrada: "ink",
+    pausada: "amber",
+    archivada: "slate",
+    // Leads
+    nuevo: "slate",
+    contactado: "amber",
+    con_visita: "plum",
+    sin_interes: "slate",
+    cerrado_exitoso: "green",
+    // Visitas
+    agendada: "slate",
+    confirmada: "plum",
+    realizada: "green",
+    cancelada: "slate",
+    no_asistio: "amber",
   };
-  return map[estado] ?? "neutral";
+  return map[estado] ?? "slate";
 }
