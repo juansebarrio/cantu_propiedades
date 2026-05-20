@@ -109,3 +109,41 @@ export async function listarSociosActivos() {
   if (error) throw error;
   return data ?? [];
 }
+
+export async function verificarTelefonoDuplicado(telefono: string) {
+  if (!telefono || telefono.trim().length < 6) return [];
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("leads")
+    .select(
+      `
+      id, nombre, telefono, email, estado, canal_origen, creado_en,
+      propiedad:propiedades(id, direccion)
+    `,
+    )
+    .eq("telefono", telefono.trim())
+    .order("creado_en", { ascending: false });
+  if (error) throw error;
+  return data ?? [];
+}
+
+export async function listarPropiedadesParaLead() {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("propiedades")
+    .select("id, direccion, tipo, operacion, estado")
+    .not("estado", "in", "(cerrada,archivada)")
+    .order("direccion");
+  if (error) throw error;
+  return data ?? [];
+}
+
+export async function listarDuenosParaReferencia() {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("duenos")
+    .select("id, nombre")
+    .order("nombre");
+  if (error) throw error;
+  return data ?? [];
+}

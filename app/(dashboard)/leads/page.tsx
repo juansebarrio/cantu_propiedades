@@ -89,10 +89,12 @@ export default async function LeadsPage({
             {leads.length} {leads.length === 1 ? "lead" : "leads"} en seguimiento
           </p>
         </div>
-        <Button disabled title="Próximamente · vuelta B">
-          <Plus size={16} />
-          Nuevo lead
-        </Button>
+        <Link href="/leads/nuevo">
+          <Button>
+            <Plus size={16} />
+            Nuevo lead
+          </Button>
+        </Link>
       </div>
 
       <Card className="mb-6 p-4">

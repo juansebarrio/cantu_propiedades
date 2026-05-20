@@ -15,7 +15,8 @@ import {
   CardSubtitle,
 } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
-import { ArrowLeft, AlertCircle, ExternalLink } from "lucide-react";
+import { ArrowLeft, AlertCircle, ExternalLink, Pencil } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 
 function formatearFecha(fecha: string | null): string {
   if (!fecha) return "—";
@@ -97,6 +98,12 @@ export default async function LeadDetalle({
             ingresó {formatearFecha(lead.creado_en)}
           </p>
         </div>
+        <Link href={`/leads/${lead.id}/editar`}>
+          <Button variant="secondary" size="sm">
+            <Pencil size={14} />
+            Editar
+          </Button>
+        </Link>
       </div>
 
       {duplicados.length > 0 && (
