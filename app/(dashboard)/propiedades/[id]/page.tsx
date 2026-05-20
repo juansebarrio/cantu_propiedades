@@ -100,6 +100,12 @@ export default async function PropiedadDetalle({
           <Card>
             <CardHeader>
               <CardTitle>Visitas y devoluciones</CardTitle>
+              <Link
+                href={`/agenda?nueva=1&propiedad=${propiedad.id}`}
+                className="font-mono text-[10px] uppercase tracking-widest text-ink-500 hover:text-ink-900"
+              >
+                + Agendar
+              </Link>
             </CardHeader>
             {(propiedad.visitas?.length ?? 0) === 0 ? (
               <p className="text-sm italic text-ink-500">

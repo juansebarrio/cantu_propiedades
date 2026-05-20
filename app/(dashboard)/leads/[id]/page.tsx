@@ -420,6 +420,11 @@ export default async function LeadDetalle({
               <CardTitle>Acciones</CardTitle>
             </CardHeader>
             <div className="flex flex-col gap-2">
+              <Link href={`/agenda?nueva=1&lead=${lead.id}`}>
+                <Button variant="accent" className="w-full">
+                  Agendar visita
+                </Button>
+              </Link>
               <Link href={`/leads/${lead.id}/editar`}>
                 <Button variant="secondary" className="w-full">
                   <Pencil size={14} strokeWidth={1.5} />

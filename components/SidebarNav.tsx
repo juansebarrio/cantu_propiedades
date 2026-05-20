@@ -23,7 +23,7 @@ const items: NavItem[] = [
   { href: "/tablero", label: "Tablero", icon: LayoutDashboard, disabled: true },
   { href: "/propiedades", label: "Propiedades", icon: Building2 },
   { href: "/leads", label: "Leads", icon: Users },
-  { href: "/agenda", label: "Agenda", icon: Calendar, disabled: true },
+  { href: "/agenda", label: "Agenda", icon: Calendar },
   { href: "/reportes", label: "Reportes", icon: FileText, disabled: true },
 ];
 
