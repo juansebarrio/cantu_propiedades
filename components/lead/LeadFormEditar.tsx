@@ -6,6 +6,7 @@ import { actualizarLead } from "@/app/(dashboard)/leads/actions";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
+import { Field } from "@/components/ui/Field";
 import { Loader2 } from "lucide-react";
 
 const estadosLead = [
@@ -46,7 +47,7 @@ export function LeadFormEditar({
       }}
       className="space-y-5"
     >
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         <Field label="Estado">
           <Select name="estado" defaultValue={lead.estado}>
             {estadosLead.map((e) => (
@@ -89,50 +90,33 @@ export function LeadFormEditar({
       </Field>
 
       {puedeEditarNotas && (
-        <Field label="Notas internas">
+        <Field label="Notas internas" hint="Solo socios ven esta columna">
           <textarea
             name="notas_internas"
             rows={4}
             defaultValue={lead.notas_internas ?? ""}
-            className="w-full rounded-md border border-line bg-white px-3 py-2 text-sm text-ink placeholder:text-ink/40 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+            className="w-full rounded-sm border border-ink-200 bg-white px-3 py-2.5 font-sans text-sm text-ink-900 placeholder:text-ink-400 focus:border-ink-900 focus:outline-none focus:ring-[3px] focus:ring-ink-900/8"
           />
         </Field>
       )}
 
       {errorGeneral && (
-        <div className="rounded-md bg-red-50 px-4 py-3 text-sm text-red-800">
+        <div className="rounded-sm border border-brick-200 bg-brick-50 px-4 py-3 text-sm text-brick-700">
           {errorGeneral}
         </div>
       )}
 
-      <div className="flex gap-3 pt-2">
-        <Button type="submit" disabled={isPending}>
-          {isPending && <Loader2 size={14} className="animate-spin" />}
-          Guardar cambios
-        </Button>
+      <div className="flex justify-end gap-3 border-t border-cream-200 pt-5">
         <Link href={`/leads/${lead.id}`}>
           <Button type="button" variant="ghost">
             Cancelar
           </Button>
         </Link>
+        <Button type="submit" disabled={isPending}>
+          {isPending && <Loader2 size={14} strokeWidth={1.5} className="animate-spin" />}
+          Guardar cambios
+        </Button>
       </div>
     </form>
-  );
-}
-
-function Field({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div>
-      <label className="mb-1 block text-xs uppercase tracking-wide text-ink/50">
-        {label}
-      </label>
-      {children}
-    </div>
   );
 }

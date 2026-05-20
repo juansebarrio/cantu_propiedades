@@ -6,6 +6,7 @@ import { Badge, tonoParaEstado } from "@/components/ui/Badge";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Button } from "@/components/ui/Button";
+import { Field } from "@/components/ui/Field";
 import { Plus, Search } from "lucide-react";
 
 const tiposPropiedad = [
@@ -63,34 +64,37 @@ export default async function PropiedadesPage({
     operacion: searchParams.operacion,
   });
 
+  const publicadas = propiedades.filter(
+    (p: any) => p.estado === "publicada",
+  ).length;
+
   return (
     <div className="mx-auto max-w-7xl">
-      <div className="mb-6 flex items-center justify-between">
+      <header className="mb-8 flex items-end justify-between gap-6 border-b border-cream-200 pb-6">
         <div>
-          <h1 className="font-display text-3xl font-semibold text-ink">
+          <h1 className="font-display text-4xl tracking-tight text-ink-900">
             Propiedades
           </h1>
-          <p className="mt-1 text-sm text-ink/60">
+          <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-ink-500">
             {propiedades.length}{" "}
-            {propiedades.length === 1 ? "propiedad" : "propiedades"} en cartera
+            {propiedades.length === 1 ? "propiedad" : "propiedades"} ·{" "}
+            {publicadas} {publicadas === 1 ? "publicada" : "publicadas"}
           </p>
         </div>
-        <Button disabled title="Próximamente">
-          <Plus size={16} />
+        <Button variant="accent" disabled title="Próximamente">
+          <Plus size={16} strokeWidth={1.5} />
           Nueva propiedad
         </Button>
-      </div>
+      </header>
 
-      <Card className="mb-6 p-4">
-        <form className="flex flex-wrap items-end gap-3">
-          <div className="min-w-[200px] flex-1">
-            <label className="mb-1 block text-xs uppercase tracking-wide text-ink/50">
-              Buscar
-            </label>
+      <Card className="mb-6">
+        <form className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <Field label="Buscar">
             <div className="relative">
               <Search
                 size={14}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-ink/40"
+                strokeWidth={1.5}
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-400"
               />
               <Input
                 name="q"
@@ -99,26 +103,20 @@ export default async function PropiedadesPage({
                 className="pl-9"
               />
             </div>
-          </div>
+          </Field>
 
-          <div>
-            <label className="mb-1 block text-xs uppercase tracking-wide text-ink/50">
-              Estado
-            </label>
+          <Field label="Estado">
             <Select name="estado" defaultValue={searchParams.estado ?? ""}>
               <option value="">Todos</option>
               {estados.map((e) => (
                 <option key={e} value={e}>
-                  {e.replace("_", " ")}
+                  {e.replace(/_/g, " ")}
                 </option>
               ))}
             </Select>
-          </div>
+          </Field>
 
-          <div>
-            <label className="mb-1 block text-xs uppercase tracking-wide text-ink/50">
-              Tipo
-            </label>
+          <Field label="Tipo">
             <Select name="tipo" defaultValue={searchParams.tipo ?? ""}>
               <option value="">Todos</option>
               {tiposPropiedad.map((t) => (
@@ -127,12 +125,9 @@ export default async function PropiedadesPage({
                 </option>
               ))}
             </Select>
-          </div>
+          </Field>
 
-          <div>
-            <label className="mb-1 block text-xs uppercase tracking-wide text-ink/50">
-              Operación
-            </label>
+          <Field label="Operación">
             <Select
               name="operacion"
               defaultValue={searchParams.operacion ?? ""}
@@ -144,74 +139,106 @@ export default async function PropiedadesPage({
                 </option>
               ))}
             </Select>
-          </div>
+          </Field>
 
-          <div className="flex gap-2">
+          <div className="flex items-end gap-2 lg:col-span-4 lg:justify-end">
+            <Link href="/propiedades">
+              <Button type="button" variant="ghost">
+                Limpiar filtros
+              </Button>
+            </Link>
             <Button type="submit" variant="primary">
               Filtrar
             </Button>
-            <Link href="/propiedades">
-              <Button type="button" variant="ghost">
-                Limpiar
-              </Button>
-            </Link>
           </div>
         </form>
       </Card>
 
-      <Card className="overflow-hidden p-0">
-        {propiedades.length === 0 ? (
-          <div className="px-6 py-12 text-center text-ink/50">
+      {propiedades.length === 0 ? (
+        <Card>
+          <p className="text-center font-display text-lg italic text-ink-500">
             No hay propiedades que coincidan con los filtros.
+          </p>
+          <div className="mt-4 flex justify-center">
+            <Link href="/propiedades">
+              <Button variant="ghost">Limpiar filtros</Button>
+            </Link>
           </div>
-        ) : (
-          <table className="w-full text-sm">
-            <thead className="border-b border-line bg-line/20 text-xs uppercase tracking-wide text-ink/50">
-              <tr>
-                <th className="px-6 py-3 text-left font-medium">Dirección</th>
-                <th className="px-6 py-3 text-left font-medium">Tipo</th>
-                <th className="px-6 py-3 text-left font-medium">Operación</th>
-                <th className="px-6 py-3 text-left font-medium">Estado</th>
-                <th className="px-6 py-3 text-right font-medium">Precio</th>
-                <th className="px-6 py-3 text-left font-medium">Dueño</th>
-                <th className="px-6 py-3 text-right font-medium">Días</th>
+        </Card>
+      ) : (
+        <Card className="overflow-hidden p-0">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-ink-200">
+                <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                  Propiedad
+                </th>
+                <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                  Operación
+                </th>
+                <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                  Estado
+                </th>
+                <th className="px-4 py-3 text-right font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                  Precio
+                </th>
+                <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                  Dueño
+                </th>
+                <th className="px-4 py-3 text-right font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                  Días
+                </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-line">
+            <tbody>
               {propiedades.map((p: any) => (
-                <tr key={p.id} className="hover:bg-line/10">
-                  <td className="px-6 py-4">
+                <tr
+                  key={p.id}
+                  className="border-b border-cream-200 transition-colors last:border-0 hover:bg-cream-100"
+                >
+                  <td className="px-4 py-4">
                     <Link
                       href={`/propiedades/${p.id}`}
-                      className="font-medium text-ink hover:text-accent"
+                      className="block hover:text-brick-600"
                     >
-                      {p.direccion}
+                      <div className="flex items-center gap-2">
+                        <span className="font-display text-[17px] text-ink-900">
+                          {p.direccion}
+                        </span>
+                        {p.confidencial && (
+                          <Badge tone="brick" dot={false}>
+                            Confidencial
+                          </Badge>
+                        )}
+                      </div>
+                      <div className="mt-0.5 font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                        {p.tipo}
+                      </div>
                     </Link>
                   </td>
-                  <td className="px-6 py-4 capitalize text-ink/70">{p.tipo}</td>
-                  <td className="px-6 py-4 capitalize text-ink/70">
+                  <td className="px-4 py-4 text-sm capitalize text-ink-700">
                     {p.operacion}
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-4 py-4">
                     <Badge tone={tonoParaEstado(p.estado)}>
-                      {p.estado.replace("_", " ")}
+                      {p.estado.replace(/_/g, " ")}
                     </Badge>
                   </td>
-                  <td className="px-6 py-4 text-right font-medium text-ink">
+                  <td className="num px-4 py-4 text-right font-display text-base text-ink-900">
                     {formatearPrecio(p.precio_actual, p.moneda)}
                   </td>
-                  <td className="px-6 py-4 text-ink/70">
+                  <td className="px-4 py-4 text-sm text-ink-700">
                     {p.dueno?.nombre ?? "—"}
                   </td>
-                  <td className="px-6 py-4 text-right text-ink/60">
+                  <td className="num px-4 py-4 text-right font-mono text-sm text-ink-500">
                     {diasDesde(p.fecha_captacion)}
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-        )}
-      </Card>
+        </Card>
+      )}
     </div>
   );
 }

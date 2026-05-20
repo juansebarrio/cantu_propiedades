@@ -32,20 +32,22 @@ export default async function EditarLeadPage({
     <div className="mx-auto max-w-3xl">
       <Link
         href={`/leads/${params.id}`}
-        className="mb-4 inline-flex items-center gap-2 text-sm text-ink/60 hover:text-ink"
+        className="mb-6 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-ink-500 hover:text-ink-900"
       >
-        <ArrowLeft size={14} />
+        <ArrowLeft size={12} strokeWidth={1.5} />
         Volver a la ficha
       </Link>
 
-      <h1 className="font-display text-3xl font-semibold text-ink">
-        Editar lead
-      </h1>
-      <p className="mb-6 mt-1 text-sm text-ink/60">
-        {lead.nombre} · {lead.telefono ?? "sin teléfono"}
-      </p>
+      <header className="mb-8 border-b border-cream-200 pb-6">
+        <h1 className="font-display text-4xl tracking-tight text-ink-900">
+          Editar lead
+        </h1>
+        <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-ink-500">
+          {lead.nombre} · {lead.telefono ?? "Sin teléfono"}
+        </p>
+      </header>
 
-      <Card>
+      <Card className="p-8 lg:p-10">
         <LeadFormEditar
           lead={lead}
           socios={socios as any}

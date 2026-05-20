@@ -8,19 +8,9 @@ type Tone =
   | "brick"
   | "cream"
   | "green"
-  | "ink"
-  // Aliases legacy · serán removidos en Vuelta 3
-  | "neutral"
-  | "yellow"
-  | "violet"
-  | "orange"
-  | "red"
-  | "blue";
+  | "ink";
 
-const tones: Record<
-  Exclude<Tone, "neutral" | "yellow" | "violet" | "orange" | "red" | "blue">,
-  { bg: string; fg: string }
-> = {
+const tones: Record<Tone, { bg: string; fg: string }> = {
   slate: { bg: "bg-slate-50", fg: "text-slate-500" },
   amber: { bg: "bg-amber-50", fg: "text-amber-500" },
   plum: { bg: "bg-plum-50", fg: "text-plum-500" },
@@ -28,18 +18,6 @@ const tones: Record<
   cream: { bg: "bg-cream-200", fg: "text-ink-700" },
   green: { bg: "bg-green-50", fg: "text-green-500" },
   ink: { bg: "bg-ink-800", fg: "text-cream-100" },
-};
-
-const legacyAliases: Record<
-  "neutral" | "yellow" | "violet" | "orange" | "red" | "blue",
-  keyof typeof tones
-> = {
-  neutral: "slate",
-  yellow: "amber",
-  violet: "plum",
-  orange: "brick",
-  red: "brick",
-  blue: "slate",
 };
 
 type Props = HTMLAttributes<HTMLSpanElement> & {
@@ -54,10 +32,7 @@ export function Badge({
   children,
   ...props
 }: Props) {
-  const resolved = (
-    tone in tones ? tone : legacyAliases[tone as keyof typeof legacyAliases]
-  ) as keyof typeof tones;
-  const t = tones[resolved];
+  const t = tones[tone];
 
   return (
     <span

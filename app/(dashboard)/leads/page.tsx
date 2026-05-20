@@ -2,10 +2,11 @@ import Link from "next/link";
 import { getUsuarioActual } from "@/lib/auth/current-user";
 import { listarLeads, listarSociosActivos } from "@/lib/supabase/queries/leads";
 import { Card } from "@/components/ui/Card";
-import { Badge } from "@/components/ui/Badge";
+import { Badge, tonoParaEstado } from "@/components/ui/Badge";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Button } from "@/components/ui/Button";
+import { Field } from "@/components/ui/Field";
 import { Plus, Search } from "lucide-react";
 
 const estadosLead = [
@@ -41,19 +42,6 @@ type SearchParams = {
   responsable_id?: string;
 };
 
-function tonoParaEstadoLead(estado: string) {
-  const map: Record<string, any> = {
-    nuevo: "blue",
-    contactado: "yellow",
-    con_visita: "violet",
-    con_oferta: "orange",
-    sin_interes: "neutral",
-    cerrado_exitoso: "green",
-    archivado: "neutral",
-  };
-  return map[estado] ?? "neutral";
-}
-
 function formatearFecha(fecha: string | null): string {
   if (!fecha) return "—";
   return new Date(fecha).toLocaleDateString("es-AR", {
@@ -80,33 +68,36 @@ export default async function LeadsPage({
     listarSociosActivos(),
   ]);
 
+  const nuevos = leads.filter((l: any) => l.estado === "nuevo").length;
+
   return (
     <div className="mx-auto max-w-7xl">
-      <div className="mb-6 flex items-center justify-between">
+      <header className="mb-8 flex items-end justify-between gap-6 border-b border-cream-200 pb-6">
         <div>
-          <h1 className="font-display text-3xl font-semibold text-ink">Leads</h1>
-          <p className="mt-1 text-sm text-ink/60">
-            {leads.length} {leads.length === 1 ? "lead" : "leads"} en seguimiento
+          <h1 className="font-display text-4xl tracking-tight text-ink-900">
+            Leads
+          </h1>
+          <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-ink-500">
+            {leads.length} {leads.length === 1 ? "lead" : "leads"} ·{" "}
+            {nuevos} {nuevos === 1 ? "sin contactar" : "sin contactar"}
           </p>
         </div>
         <Link href="/leads/nuevo">
-          <Button>
-            <Plus size={16} />
+          <Button variant="accent">
+            <Plus size={16} strokeWidth={1.5} />
             Nuevo lead
           </Button>
         </Link>
-      </div>
+      </header>
 
-      <Card className="mb-6 p-4">
-        <form className="flex flex-wrap items-end gap-3">
-          <div className="min-w-[220px] flex-1">
-            <label className="mb-1 block text-xs uppercase tracking-wide text-ink/50">
-              Buscar
-            </label>
+      <Card className="mb-6">
+        <form className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <Field label="Buscar">
             <div className="relative">
               <Search
                 size={14}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-ink/40"
+                strokeWidth={1.5}
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-400"
               />
               <Input
                 name="q"
@@ -115,12 +106,9 @@ export default async function LeadsPage({
                 className="pl-9"
               />
             </div>
-          </div>
+          </Field>
 
-          <div>
-            <label className="mb-1 block text-xs uppercase tracking-wide text-ink/50">
-              Estado
-            </label>
+          <Field label="Estado">
             <Select name="estado" defaultValue={searchParams.estado ?? ""}>
               <option value="">Todos</option>
               {estadosLead.map((e) => (
@@ -129,12 +117,9 @@ export default async function LeadsPage({
                 </option>
               ))}
             </Select>
-          </div>
+          </Field>
 
-          <div>
-            <label className="mb-1 block text-xs uppercase tracking-wide text-ink/50">
-              Canal
-            </label>
+          <Field label="Canal">
             <Select
               name="canal_origen"
               defaultValue={searchParams.canal_origen ?? ""}
@@ -146,12 +131,9 @@ export default async function LeadsPage({
                 </option>
               ))}
             </Select>
-          </div>
+          </Field>
 
-          <div>
-            <label className="mb-1 block text-xs uppercase tracking-wide text-ink/50">
-              Responsable
-            </label>
+          <Field label="Responsable">
             <Select
               name="responsable_id"
               defaultValue={searchParams.responsable_id ?? ""}
@@ -163,91 +145,126 @@ export default async function LeadsPage({
                 </option>
               ))}
             </Select>
-          </div>
+          </Field>
 
-          <div className="flex gap-2">
+          <div className="flex items-end gap-2 lg:col-span-4 lg:justify-end">
+            <Link href="/leads">
+              <Button type="button" variant="ghost">
+                Limpiar filtros
+              </Button>
+            </Link>
             <Button type="submit" variant="primary">
               Filtrar
             </Button>
-            <Link href="/leads">
-              <Button type="button" variant="ghost">
-                Limpiar
-              </Button>
-            </Link>
           </div>
         </form>
       </Card>
 
-      <Card className="overflow-hidden p-0">
-        {leads.length === 0 ? (
-          <div className="px-6 py-12 text-center text-ink/50">
+      {leads.length === 0 ? (
+        <Card>
+          <p className="text-center font-display text-lg italic text-ink-500">
             No hay leads que coincidan con los filtros.
+          </p>
+          <div className="mt-4 flex justify-center">
+            <Link href="/leads">
+              <Button variant="ghost">Limpiar filtros</Button>
+            </Link>
           </div>
-        ) : (
-          <table className="w-full text-sm">
-            <thead className="border-b border-line bg-line/20 text-xs uppercase tracking-wide text-ink/50">
-              <tr>
-                <th className="px-6 py-3 text-left font-medium">Nombre</th>
-                <th className="px-6 py-3 text-left font-medium">Teléfono</th>
-                <th className="px-6 py-3 text-left font-medium">Propiedad</th>
-                <th className="px-6 py-3 text-left font-medium">Canal</th>
-                <th className="px-6 py-3 text-left font-medium">Estado</th>
-                <th className="px-6 py-3 text-left font-medium">Responsable</th>
-                <th className="px-6 py-3 text-left font-medium">
+        </Card>
+      ) : (
+        <Card className="overflow-hidden p-0">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-ink-200">
+                <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                  Lead
+                </th>
+                <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                  Teléfono
+                </th>
+                <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                  Propiedad
+                </th>
+                <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                  Origen
+                </th>
+                <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                  Estado
+                </th>
+                <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                  Responsable
+                </th>
+                <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
                   Próxima acción
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-line">
+            <tbody>
               {leads.map((l: any) => (
-                <tr key={l.id} className="hover:bg-line/10">
-                  <td className="px-6 py-4">
+                <tr
+                  key={l.id}
+                  className="border-b border-cream-200 transition-colors last:border-0 hover:bg-cream-100"
+                >
+                  <td className="px-4 py-4">
                     <Link
                       href={`/leads/${l.id}`}
-                      className="font-medium text-ink hover:text-accent"
+                      className="block hover:text-brick-600"
                     >
-                      {l.nombre}
+                      <div className="font-display text-[17px] text-ink-900">
+                        {l.nombre}
+                      </div>
+                      {l.email && (
+                        <div className="mt-0.5 font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                          {l.email}
+                        </div>
+                      )}
                     </Link>
                   </td>
-                  <td className="px-6 py-4 text-ink/70">
+                  <td className="px-4 py-4 font-mono text-sm text-ink-700">
                     {l.telefono ?? "—"}
                   </td>
-                  <td className="px-6 py-4 text-ink/70">
+                  <td className="px-4 py-4 text-sm text-ink-700">
                     {l.propiedad?.direccion ?? (
-                      <span className="italic text-ink/40">general</span>
+                      <span className="italic text-ink-400">general</span>
                     )}
                   </td>
-                  <td className="px-6 py-4">
-                    <span className="text-xs capitalize text-ink/60">
-                      {l.canal_origen.replace(/_/g, " ")}
-                    </span>
+                  <td className="px-4 py-4">
+                    {l.canal_origen === "referido_zulma" ? (
+                      <Badge tone="plum">Referido por Zulma</Badge>
+                    ) : (
+                      <Badge tone="slate" dot={false}>
+                        {l.canal_origen.replace(/_/g, " ")}
+                      </Badge>
+                    )}
                   </td>
-                  <td className="px-6 py-4">
-                    <Badge tone={tonoParaEstadoLead(l.estado)}>
+                  <td className="px-4 py-4">
+                    <Badge tone={tonoParaEstado(l.estado)}>
                       {l.estado.replace(/_/g, " ")}
                     </Badge>
                   </td>
-                  <td className="px-6 py-4 text-ink/70">
+                  <td className="px-4 py-4 text-sm text-ink-700">
                     {l.responsable?.nombre ?? "—"}
                   </td>
-                  <td className="px-6 py-4 text-ink/60">
+                  <td className="px-4 py-4">
                     {l.proxima_accion ? (
                       <>
-                        <div className="text-xs">{l.proxima_accion}</div>
-                        <div className="text-xs text-ink/40">
+                        <div className="text-sm text-ink-700">
+                          {l.proxima_accion}
+                        </div>
+                        <div className="font-mono text-[10px] uppercase tracking-widest text-ink-500">
                           {formatearFecha(l.fecha_proxima_accion)}
                         </div>
                       </>
                     ) : (
-                      "—"
+                      <span className="text-ink-400">—</span>
                     )}
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-        )}
-      </Card>
+        </Card>
+      )}
     </div>
   );
 }

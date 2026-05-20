@@ -12,7 +12,7 @@ export default async function DashboardLayout({
   if (!usuario) redirect("/login");
 
   return (
-    <div className="flex min-h-screen bg-paper">
+    <div className="flex min-h-screen bg-cream-50">
       <Sidebar />
       <div className="flex flex-1 flex-col">
         <Topbar usuario={usuario} />

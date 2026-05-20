@@ -43,10 +43,6 @@ const config: Config = {
         amber: { 50: "var(--amber-50)", 500: "var(--amber-500)" },
         plum: { 50: "var(--plum-50)", 500: "var(--plum-500)" },
         slate: { 50: "var(--slate-50)", 500: "var(--slate-500)" },
-        // Aliases legacy (se mantienen mientras las pantallas no estén refactorizadas)
-        paper: "var(--cream-50)",
-        line: "var(--cream-200)",
-        accent: "var(--brick-500)",
       },
       fontFamily: {
         display: ["var(--font-display)", "Times New Roman", "Georgia", "serif"],

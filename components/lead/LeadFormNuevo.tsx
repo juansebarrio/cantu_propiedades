@@ -11,7 +11,8 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Card } from "@/components/ui/Card";
-import { AlertCircle, Loader2 } from "lucide-react";
+import { Field } from "@/components/ui/Field";
+import { AlertTriangle, Loader2 } from "lucide-react";
 
 type Propiedad = {
   id: string;
@@ -102,14 +103,18 @@ export function LeadFormNuevo({
   if (modo === "asociar-consulta" && leadElegido) {
     return (
       <div className="space-y-4">
-        <Card className="border-violet-200 bg-violet-50/40">
-          <h3 className="font-display text-lg font-semibold text-violet-900">
+        <Card className="border-plum-50 bg-plum-50/40">
+          <h3 className="font-display text-lg text-ink-900">
             Asociar consulta a {leadElegido.nombre}
           </h3>
-          <p className="mt-1 text-sm text-violet-800/70">
+          <p className="mt-1 text-sm text-ink-700">
             Vas a agregar una nueva consulta al lead existente. Si te
             equivocaste,{" "}
-            <button onClick={volverACrear} className="underline">
+            <button
+              type="button"
+              onClick={volverACrear}
+              className="underline hover:text-plum-500"
+            >
               volvé a crear lead nuevo
             </button>
             .
@@ -163,13 +168,13 @@ export function LeadFormNuevo({
             <textarea
               name="notas"
               rows={3}
-              className="w-full rounded-md border border-line bg-white px-3 py-2 text-sm text-ink placeholder:text-ink/40 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+              className="w-full rounded-sm border border-ink-200 bg-white px-3 py-2.5 font-sans text-sm text-ink-900 placeholder:text-ink-400 focus:border-ink-900 focus:outline-none focus:ring-[3px] focus:ring-ink-900/8"
               placeholder='Ej: "Volvió a llamar interesada en otra propiedad"'
             />
           </Field>
 
           {errorGeneral && (
-            <div className="rounded-md bg-red-50 px-4 py-3 text-sm text-red-800">
+            <div className="rounded-sm border border-brick-200 bg-brick-50 px-4 py-3 text-sm text-brick-700">
               {errorGeneral}
             </div>
           )}
@@ -226,17 +231,18 @@ export function LeadFormNuevo({
       </div>
 
       {duplicados.length > 0 && (
-        <Card className="border-orange-200 bg-orange-50/50">
+        <Card className="border-brick-200 bg-brick-50/50">
           <div className="flex items-start gap-3">
-            <AlertCircle
+            <AlertTriangle
               size={18}
-              className="mt-0.5 shrink-0 text-orange-600"
+              strokeWidth={1.5}
+              className="mt-0.5 shrink-0 text-brick-700"
             />
             <div className="flex-1">
-              <h3 className="font-display text-base font-semibold text-orange-900">
+              <h3 className="font-display text-base text-ink-900">
                 Este teléfono ya está en el sistema
               </h3>
-              <p className="mt-1 text-sm text-orange-800/80">
+              <p className="mt-1 text-sm text-ink-700">
                 Encontramos {duplicados.length}{" "}
                 {duplicados.length === 1 ? "lead" : "leads"} con este número.
                 ¿Es la misma persona?
@@ -245,12 +251,14 @@ export function LeadFormNuevo({
                 {duplicados.map((d) => (
                   <li
                     key={d.id}
-                    className="flex items-center justify-between gap-3 rounded-md border border-orange-200/60 bg-white px-3 py-2"
+                    className="flex items-center justify-between gap-3 rounded-sm border border-brick-100 bg-white px-3 py-2"
                   >
-                    <div className="text-sm">
-                      <div className="font-medium text-ink">{d.nombre}</div>
-                      <div className="text-xs text-ink/60">
-                        {d.propiedad?.direccion ?? "consulta general"} · estado{" "}
+                    <div>
+                      <div className="font-display text-base text-ink-900">
+                        {d.nombre}
+                      </div>
+                      <div className="font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                        {d.propiedad?.direccion ?? "consulta general"} · Estado{" "}
                         {d.estado.replace(/_/g, " ")}
                       </div>
                     </div>
@@ -271,9 +279,8 @@ export function LeadFormNuevo({
                   </li>
                 ))}
               </ul>
-              <p className="mt-3 text-xs text-orange-800/60">
-                Si es persona distinta con el mismo número, podés seguir
-                cargando el lead nuevo abajo.
+              <p className="mt-3 font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                Si es persona distinta, podés seguir cargando el lead abajo.
               </p>
             </div>
           </div>
@@ -362,7 +369,7 @@ export function LeadFormNuevo({
         <textarea
           name="notas_internas"
           rows={3}
-          className="w-full rounded-md border border-line bg-white px-3 py-2 text-sm text-ink placeholder:text-ink/40 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+          className="w-full rounded-sm border border-ink-200 bg-white px-3 py-2.5 font-sans text-sm text-ink-900 placeholder:text-ink-400 focus:border-ink-900 focus:outline-none focus:ring-[3px] focus:ring-ink-900/8"
           placeholder="Detalles que ayuden a continuar la conversación"
         />
       </Field>
@@ -385,28 +392,5 @@ export function LeadFormNuevo({
         </Link>
       </div>
     </form>
-  );
-}
-
-function Field({
-  label,
-  children,
-  error,
-  required,
-}: {
-  label: string;
-  children: React.ReactNode;
-  error?: string;
-  required?: boolean;
-}) {
-  return (
-    <div>
-      <label className="mb-1 block text-xs uppercase tracking-wide text-ink/50">
-        {label}
-        {required && <span className="ml-1 text-orange-500">*</span>}
-      </label>
-      {children}
-      {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
-    </div>
   );
 }

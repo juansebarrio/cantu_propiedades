@@ -14,8 +14,8 @@ import {
   CardTitle,
   CardSubtitle,
 } from "@/components/ui/Card";
-import { Badge } from "@/components/ui/Badge";
-import { ArrowLeft, AlertCircle, ExternalLink, Pencil } from "lucide-react";
+import { Badge, tonoParaEstado } from "@/components/ui/Badge";
+import { ArrowLeft, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
 function formatearFecha(fecha: string | null): string {
@@ -38,17 +38,10 @@ function formatearFechaHora(fecha: string | null): string {
   });
 }
 
-function tonoParaEstadoLead(estado: string): any {
-  const map: Record<string, any> = {
-    nuevo: "blue",
-    contactado: "yellow",
-    con_visita: "violet",
-    con_oferta: "orange",
-    sin_interes: "neutral",
-    cerrado_exitoso: "green",
-    archivado: "neutral",
-  };
-  return map[estado] ?? "neutral";
+function diasDesde(fecha: string): number {
+  const d = new Date(fecha);
+  const ahora = new Date();
+  return Math.floor((ahora.getTime() - d.getTime()) / (1000 * 60 * 60 * 24));
 }
 
 export default async function LeadDetalle({
@@ -69,89 +62,86 @@ export default async function LeadDetalle({
 
   const duplicados = await leadsConMismoTelefono(lead.id, lead.telefono);
   const verNotas = puedeVerNotasInternas(usuario.rol);
+  const esReferidoZulma = lead.canal_origen === "referido_zulma";
+  const dias = diasDesde(lead.creado_en);
 
   return (
-    <div className="mx-auto max-w-5xl">
+    <div className="mx-auto max-w-6xl">
       <Link
         href="/leads"
-        className="mb-4 inline-flex items-center gap-2 text-sm text-ink/60 hover:text-ink"
+        className="mb-6 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-ink-500 hover:text-ink-900"
       >
-        <ArrowLeft size={14} />
+        <ArrowLeft size={12} strokeWidth={1.5} />
         Volver a leads
       </Link>
 
-      <div className="mb-6 flex items-start justify-between gap-4">
+      <header className="mb-10 flex items-end justify-between gap-6 border-b border-cream-200 pb-8">
         <div>
-          <div className="mb-2 flex items-center gap-2">
-            <Badge tone={tonoParaEstadoLead(lead.estado)}>
+          <div className="mb-3 flex items-center gap-2">
+            <Badge tone={tonoParaEstado(lead.estado)}>
               {lead.estado.replace(/_/g, " ")}
             </Badge>
-            <span className="text-xs capitalize text-ink/50">
-              vía {lead.canal_origen.replace(/_/g, " ")}
-            </span>
+            {esReferidoZulma && (
+              <Badge tone="plum">Referido por Zulma</Badge>
+            )}
           </div>
-          <h1 className="font-display text-3xl font-semibold text-ink">
+          <h1 className="font-display text-5xl tracking-tight text-ink-900">
             {lead.nombre}
           </h1>
-          <p className="mt-1 text-sm text-ink/60">
-            {lead.telefono ?? "sin teléfono"} · {lead.email ?? "sin email"} ·
-            ingresó {formatearFecha(lead.creado_en)}
+          <p className="mt-2 font-mono text-[10px] uppercase tracking-widest text-ink-500">
+            Lead · Cargado hace {dias} {dias === 1 ? "día" : "días"} · Vía{" "}
+            {lead.canal_origen.replace(/_/g, " ")}
           </p>
         </div>
         <Link href={`/leads/${lead.id}/editar`}>
           <Button variant="secondary" size="sm">
-            <Pencil size={14} />
+            <Pencil size={14} strokeWidth={1.5} />
             Editar
           </Button>
         </Link>
-      </div>
+      </header>
 
-      {duplicados.length > 0 && (
-        <Card className="mb-6 border-orange-200 bg-orange-50/40">
-          <div className="flex items-start gap-3">
-            <AlertCircle
-              size={18}
-              className="mt-0.5 shrink-0 text-orange-600"
-            />
-            <div className="flex-1">
-              <h3 className="font-display text-base font-semibold text-orange-900">
-                Otros leads con este teléfono
-              </h3>
-              <p className="mt-1 text-sm text-orange-800/80">
-                Este número apareció en {duplicados.length}{" "}
-                {duplicados.length === 1
-                  ? "consulta previa"
-                  : "consultas previas"}
-                . Es muy probable que sea la misma persona.
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        {/* Columna principal · 2/3 */}
+        <div className="space-y-6 lg:col-span-2">
+          {duplicados.length > 0 && (
+            <Card className="border-brick-200 bg-brick-50/50">
+              <CardHeader>
+                <CardSubtitle className="text-brick-700">
+                  Otros leads con este teléfono
+                </CardSubtitle>
+              </CardHeader>
+              <p className="mb-3 text-sm text-ink-700">
+                Atención: este teléfono aparece en {duplicados.length}{" "}
+                {duplicados.length === 1 ? "lead" : "leads"} más. Es muy
+                probable que sea la misma persona.
               </p>
-              <ul className="mt-3 divide-y divide-orange-200/60">
+              <ul className="flex flex-col divide-y divide-brick-100">
                 {duplicados.map((d: any) => (
-                  <li key={d.id} className="py-2">
+                  <li key={d.id}>
                     <Link
                       href={`/leads/${d.id}`}
-                      className="group flex items-center justify-between"
+                      className="-mx-3 flex items-center justify-between gap-3 rounded-sm px-3 py-2 transition-colors hover:bg-brick-50"
                     >
-                      <div className="text-sm">
-                        <span className="font-medium text-orange-900 group-hover:underline">
+                      <div>
+                        <div className="font-display text-base text-ink-900">
                           {d.nombre}
-                        </span>
-                        <span className="ml-2 text-orange-800/70">
-                          {d.propiedad?.direccion ?? "consulta general"} · vía{" "}
+                        </div>
+                        <div className="font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                          {d.propiedad?.direccion ?? "Consulta general"} · Vía{" "}
                           {d.canal_origen.replace(/_/g, " ")}
-                        </span>
+                        </div>
                       </div>
-                      <ExternalLink size={12} className="text-orange-600" />
+                      <Badge tone={tonoParaEstado(d.estado)}>
+                        {d.estado.replace(/_/g, " ")}
+                      </Badge>
                     </Link>
                   </li>
                 ))}
               </ul>
-            </div>
-          </div>
-        </Card>
-      )}
+            </Card>
+          )}
 
-      <div className="grid grid-cols-3 gap-6">
-        <div className="col-span-2 space-y-6">
           <Card>
             <CardHeader>
               <CardTitle>Propiedad de interés</CardTitle>
@@ -159,63 +149,64 @@ export default async function LeadDetalle({
             {lead.propiedad ? (
               <Link
                 href={`/propiedades/${lead.propiedad.id}`}
-                className="group flex items-start justify-between gap-4"
+                className="group flex items-start justify-between gap-4 transition-colors"
               >
                 <div>
-                  <div className="font-medium text-ink group-hover:text-accent">
+                  <div className="font-display text-lg text-ink-900 group-hover:text-brick-600">
                     {lead.propiedad.direccion}
                   </div>
-                  <div className="mt-1 text-sm capitalize text-ink/60">
-                    {lead.propiedad.tipo} · {lead.propiedad.operacion} ·{" "}
-                    <Badge tone="neutral">
+                  <div className="mt-1 font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                    {lead.propiedad.tipo} · {lead.propiedad.operacion}
+                  </div>
+                  <div className="mt-2">
+                    <Badge tone={tonoParaEstado(lead.propiedad.estado)}>
                       {lead.propiedad.estado.replace(/_/g, " ")}
                     </Badge>
                   </div>
                 </div>
                 {lead.propiedad.precio_actual && (
-                  <div className="text-right text-sm font-medium text-ink">
-                    {lead.propiedad.moneda?.toUpperCase()}{" "}
-                    {new Intl.NumberFormat("es-AR").format(
-                      lead.propiedad.precio_actual,
-                    )}
+                  <div className="text-right">
+                    <div className="num font-display text-xl tracking-tight text-ink-900">
+                      {lead.propiedad.moneda?.toUpperCase()}{" "}
+                      {new Intl.NumberFormat("es-AR").format(
+                        lead.propiedad.precio_actual,
+                      )}
+                    </div>
                   </div>
                 )}
               </Link>
             ) : (
-              <p className="text-sm text-ink/50">
-                Sin propiedad asignada · es una búsqueda general.
+              <p className="text-sm italic text-ink-500">
+                Sin propiedad asignada · Es una búsqueda general.
               </p>
             )}
 
             {!lead.propiedad && lead.criterio_busqueda && (
-              <div className="mt-4 rounded-md bg-line/20 p-3 text-sm">
-                <div className="mb-2 text-xs uppercase tracking-wide text-ink/50">
+              <div className="mt-4 rounded-sm border border-cream-200 bg-cream-100 p-3">
+                <div className="mb-2 font-mono text-[10px] uppercase tracking-widest text-ink-500">
                   Criterio
                 </div>
-                <pre className="whitespace-pre-wrap font-mono text-xs text-ink/70">
+                <pre className="whitespace-pre-wrap font-mono text-xs text-ink-700">
                   {JSON.stringify(lead.criterio_busqueda, null, 2)}
                 </pre>
               </div>
             )}
           </Card>
 
-          {lead.referido_por && (
-            <Card className="border-violet-200 bg-violet-50/30">
+          {esReferidoZulma && lead.referido_por && (
+            <Card className="border-plum-50 bg-plum-50/30">
               <CardHeader>
-                <CardTitle className="text-violet-900">
-                  Referido personal
-                </CardTitle>
-                <CardSubtitle className="text-violet-700">
-                  Este lead llegó por recomendación
+                <CardSubtitle className="text-plum-500">
+                  Referido por Zulma
                 </CardSubtitle>
               </CardHeader>
-              <p className="text-sm text-violet-900">
+              <p className="font-display text-lg italic leading-snug text-ink-900">
                 Lo refirió{" "}
-                <span className="font-semibold">
+                <span className="not-italic">
                   {lead.referido_por.nombre}
                 </span>
                 {lead.referido_por.telefono && (
-                  <span className="text-violet-800/70">
+                  <span className="font-mono text-sm not-italic text-ink-500">
                     {" "}
                     · {lead.referido_por.telefono}
                   </span>
@@ -226,17 +217,19 @@ export default async function LeadDetalle({
 
           <Card>
             <CardHeader>
-              <CardTitle>Historial de consultas</CardTitle>
-              <CardSubtitle>
-                Por qué propiedades preguntó este lead
-              </CardSubtitle>
+              <div>
+                <CardTitle>Historial de consultas</CardTitle>
+                <CardSubtitle className="mt-1">
+                  Por qué propiedades preguntó este lead
+                </CardSubtitle>
+              </div>
             </CardHeader>
             {(lead.consultas?.length ?? 0) === 0 ? (
-              <p className="text-sm text-ink/50">
+              <p className="text-sm italic text-ink-500">
                 Sin consultas previas registradas.
               </p>
             ) : (
-              <ul className="space-y-3">
+              <ul className="space-y-4">
                 {lead.consultas
                   .sort(
                     (a: any, b: any) =>
@@ -246,25 +239,23 @@ export default async function LeadDetalle({
                   .map((c: any) => (
                     <li
                       key={c.id}
-                      className="flex items-start justify-between border-l-2 border-line pl-4"
+                      className="border-l-2 border-cream-300 pl-4"
                     >
-                      <div>
-                        <Link
-                          href={`/propiedades/${c.propiedad?.id}`}
-                          className="text-sm font-medium text-ink hover:text-accent"
-                        >
-                          {c.propiedad?.direccion ?? "Propiedad sin asignar"}
-                        </Link>
-                        <div className="text-xs text-ink/50">
-                          {formatearFechaHora(c.fecha)} · vía{" "}
-                          {c.canal_origen.replace(/_/g, " ")}
-                        </div>
-                        {c.notas && (
-                          <p className="mt-1 text-sm italic text-ink/60">
-                            &ldquo;{c.notas}&rdquo;
-                          </p>
-                        )}
+                      <Link
+                        href={`/propiedades/${c.propiedad?.id}`}
+                        className="font-display text-base text-ink-900 hover:text-brick-600"
+                      >
+                        {c.propiedad?.direccion ?? "Propiedad sin asignar"}
+                      </Link>
+                      <div className="font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                        {formatearFechaHora(c.fecha)} · Vía{" "}
+                        {c.canal_origen.replace(/_/g, " ")}
                       </div>
+                      {c.notas && (
+                        <p className="mt-1 font-display text-base italic text-ink-700">
+                          &ldquo;{c.notas}&rdquo;
+                        </p>
+                      )}
                     </li>
                   ))}
               </ul>
@@ -276,11 +267,11 @@ export default async function LeadDetalle({
               <CardTitle>Visitas</CardTitle>
             </CardHeader>
             {(lead.visitas?.length ?? 0) === 0 ? (
-              <p className="text-sm text-ink/50">
+              <p className="text-sm italic text-ink-500">
                 Sin visitas registradas.
               </p>
             ) : (
-              <ul className="space-y-4">
+              <ul className="space-y-5">
                 {lead.visitas
                   .sort(
                     (a: any, b: any) =>
@@ -288,21 +279,21 @@ export default async function LeadDetalle({
                       new Date(a.fecha_agendada).getTime(),
                   )
                   .map((v: any) => (
-                    <li key={v.id} className="border-l-2 border-line pl-4">
-                      <div className="flex items-center justify-between">
-                        <div className="text-sm font-medium text-ink">
+                    <li key={v.id} className="border-l-2 border-cream-300 pl-4">
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="font-display text-base text-ink-900">
                           {v.propiedad?.direccion ?? "—"}
                         </div>
-                        <Badge tone="neutral">
+                        <Badge tone={tonoParaEstado(v.estado)}>
                           {v.estado.replace(/_/g, " ")}
                         </Badge>
                       </div>
-                      <div className="mt-1 text-xs text-ink/50">
-                        {formatearFechaHora(v.fecha_agendada)} · con{" "}
+                      <div className="mt-1 font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                        {formatearFechaHora(v.fecha_agendada)} · Con{" "}
                         {v.responsable?.nombre ?? "—"}
                       </div>
                       {v.devolucion_prospecto && (
-                        <p className="mt-2 text-sm italic text-ink/70">
+                        <p className="mt-2 font-display text-base italic leading-snug text-ink-700">
                           &ldquo;{v.devolucion_prospecto}&rdquo;
                         </p>
                       )}
@@ -317,11 +308,11 @@ export default async function LeadDetalle({
               <CardTitle>Comunicaciones</CardTitle>
             </CardHeader>
             {(lead.comunicaciones?.length ?? 0) === 0 ? (
-              <p className="text-sm text-ink/50">
+              <p className="text-sm italic text-ink-500">
                 Sin comunicaciones registradas.
               </p>
             ) : (
-              <ul className="space-y-3">
+              <ul className="space-y-4">
                 {lead.comunicaciones
                   .sort(
                     (a: any, b: any) =>
@@ -331,20 +322,22 @@ export default async function LeadDetalle({
                   .map((c: any) => (
                     <li
                       key={c.id}
-                      className="border-l-2 border-line pl-4 text-sm"
+                      className="border-l-2 border-cream-300 pl-4"
                     >
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs capitalize text-ink/50">
+                      <div className="flex items-center justify-between gap-3">
+                        <span className="font-mono text-[10px] uppercase tracking-widest text-ink-500">
                           {c.tipo.replace(/_/g, " ")}
                         </span>
-                        <span className="text-xs text-ink/40">
+                        <span className="font-mono text-[10px] tracking-widest text-ink-400">
                           {formatearFechaHora(c.fecha)}
                         </span>
                       </div>
-                      <p className="mt-1 text-ink/80">{c.contenido}</p>
+                      <p className="mt-1 text-sm text-ink-800">
+                        {c.contenido}
+                      </p>
                       {c.registrada_por?.nombre && (
-                        <p className="mt-1 text-xs text-ink/40">
-                          registrado por {c.registrada_por.nombre}
+                        <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-ink-400">
+                          Registrado por {c.registrada_por.nombre}
                         </p>
                       )}
                     </li>
@@ -356,76 +349,119 @@ export default async function LeadDetalle({
           {verNotas && lead.notas_internas && (
             <Card>
               <CardHeader>
-                <CardTitle>Notas internas</CardTitle>
-                <CardSubtitle>Solo visible para socios</CardSubtitle>
+                <div>
+                  <CardTitle>Notas internas</CardTitle>
+                  <CardSubtitle className="mt-1">
+                    Solo visible para socios
+                  </CardSubtitle>
+                </div>
               </CardHeader>
-              <p className="whitespace-pre-wrap text-sm leading-relaxed text-ink/70">
+              <p className="whitespace-pre-wrap text-sm leading-relaxed text-ink-700">
                 {lead.notas_internas}
               </p>
             </Card>
           )}
         </div>
 
-        <div className="space-y-6">
+        {/* Aside · 1/3 */}
+        <aside className="space-y-6">
           {lead.proxima_accion && (
-            <Card className="border-accent/30 bg-accent/5">
+            <Card className="border-brick-100 bg-brick-50/40">
               <CardHeader>
-                <CardTitle>Próxima acción</CardTitle>
-                <CardSubtitle>
-                  {formatearFechaHora(lead.fecha_proxima_accion)}
+                <CardSubtitle className="text-brick-700">
+                  Próxima acción
                 </CardSubtitle>
               </CardHeader>
-              <p className="text-sm text-ink/80">{lead.proxima_accion}</p>
+              <p className="font-display text-base text-ink-900">
+                {lead.proxima_accion}
+              </p>
+              <p className="mt-2 font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                {formatearFechaHora(lead.fecha_proxima_accion)}
+              </p>
             </Card>
           )}
 
           <Card>
             <CardHeader>
-              <CardTitle>Responsable</CardTitle>
+              <CardTitle>Contacto</CardTitle>
             </CardHeader>
-            <div className="text-sm">
-              {lead.responsable ? (
-                <span className="font-medium text-ink">
-                  {lead.responsable.nombre}
-                </span>
-              ) : (
-                <span className="text-ink/50">Sin asignar</span>
-              )}
+            <dl className="space-y-3 text-sm">
+              <div>
+                <dt className="font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                  Teléfono
+                </dt>
+                <dd className="mt-0.5 font-mono text-ink-700">
+                  {lead.telefono ?? "—"}
+                </dd>
+              </div>
+              <div>
+                <dt className="font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                  Email
+                </dt>
+                <dd className="mt-0.5 text-ink-700">
+                  {lead.email ?? "—"}
+                </dd>
+              </div>
+              <div>
+                <dt className="font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                  Responsable
+                </dt>
+                <dd className="mt-0.5 text-ink-700">
+                  {lead.responsable?.nombre ?? (
+                    <span className="italic text-ink-400">Sin asignar</span>
+                  )}
+                </dd>
+              </div>
+            </dl>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Acciones</CardTitle>
+            </CardHeader>
+            <div className="flex flex-col gap-2">
+              <Link href={`/leads/${lead.id}/editar`}>
+                <Button variant="secondary" className="w-full">
+                  <Pencil size={14} strokeWidth={1.5} />
+                  Editar lead
+                </Button>
+              </Link>
+              <Button variant="ghost" disabled title="Próximamente">
+                WhatsApp
+              </Button>
+              <Button variant="ghost" disabled title="Próximamente">
+                Enviar email
+              </Button>
+              <Button variant="danger" disabled title="Próximamente">
+                Archivar
+              </Button>
             </div>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle>Datos</CardTitle>
+              <CardTitle>Trazabilidad</CardTitle>
             </CardHeader>
-            <div className="space-y-3 text-sm">
+            <dl className="space-y-3 text-sm">
               <div>
-                <div className="text-xs uppercase tracking-wide text-ink/50">
-                  Canal de origen
-                </div>
-                <div className="capitalize text-ink/70">
-                  {lead.canal_origen.replace(/_/g, " ")}
-                </div>
-              </div>
-              <div>
-                <div className="text-xs uppercase tracking-wide text-ink/50">
-                  Última actualización
-                </div>
-                <div className="text-ink/70">
-                  {formatearFechaHora(lead.actualizado_en)}
-                </div>
-              </div>
-              <div>
-                <div className="text-xs uppercase tracking-wide text-ink/50">
+                <dt className="font-mono text-[10px] uppercase tracking-widest text-ink-500">
                   Creación
-                </div>
-                <div className="text-ink/70">
-                  {formatearFechaHora(lead.creado_en)}
-                </div>
+                </dt>
+                <dd className="mt-0.5 text-ink-700">
+                  {formatearFecha(lead.creado_en)}
+                </dd>
               </div>
-            </div>
+              <div>
+                <dt className="font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                  Última actualización
+                </dt>
+                <dd className="mt-0.5 text-ink-700">
+                  {formatearFechaHora(lead.actualizado_en)}
+                </dd>
+              </div>
+            </dl>
           </Card>
-        </div>
+        </aside>
       </div>
     </div>
   );
