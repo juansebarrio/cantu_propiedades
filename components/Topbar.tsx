@@ -1,28 +1,31 @@
-import Link from "next/link";
 import type { UsuarioActual } from "@/lib/auth/current-user";
-import { LogOut } from "lucide-react";
-
-const rolLabel: Record<string, string> = {
-  socia_titular: "Socia titular",
-  socio_operativo: "Socio operativo",
-  administrativa: "Administrativa",
-};
+import { TopbarBreadcrumb } from "@/components/TopbarBreadcrumb";
+import { UserPill } from "@/components/UserPill";
+import { Search } from "lucide-react";
 
 export function Topbar({ usuario }: { usuario: UsuarioActual }) {
   return (
-    <header className="flex h-16 items-center justify-end gap-4 border-b border-line bg-white px-8">
-      <div className="text-right">
-        <div className="text-sm font-medium text-ink">{usuario.nombre}</div>
-        <div className="text-xs text-ink/50">{rolLabel[usuario.rol]}</div>
+    <header className="flex items-center justify-between border-b border-cream-200 px-9 py-[18px]">
+      <TopbarBreadcrumb />
+
+      <div className="flex items-center gap-3.5">
+        <button
+          type="button"
+          disabled
+          title="Próximamente"
+          className="flex cursor-not-allowed items-center gap-2 p-1.5 text-[13px] text-ink-500"
+        >
+          <Search size={16} strokeWidth={1.5} />
+          <span>Buscar</span>
+          <kbd className="rounded-xs bg-cream-200 px-1.5 py-0.5 font-mono text-[10px] text-ink-600">
+            ⌘K
+          </kbd>
+        </button>
+
+        <div className="h-[18px] w-px bg-cream-300" />
+
+        <UserPill usuario={usuario} />
       </div>
-      <Link
-        href="/logout"
-        className="flex items-center gap-2 rounded-md border border-line px-3 py-1.5 text-sm text-ink/70 hover:bg-line/30"
-        title="Cerrar sesión"
-      >
-        <LogOut size={14} />
-        Salir
-      </Link>
     </header>
   );
 }

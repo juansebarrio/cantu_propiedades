@@ -1,57 +1,23 @@
-import Link from "next/link";
-import {
-  LayoutDashboard,
-  Building2,
-  Users,
-  Calendar,
-  FileText,
-} from "lucide-react";
-
-const items = [
-  { href: "/tablero", label: "Tablero", icon: LayoutDashboard, disabled: true },
-  { href: "/propiedades", label: "Propiedades", icon: Building2, disabled: false },
-  { href: "/leads", label: "Leads", icon: Users, disabled: false },
-  { href: "/agenda", label: "Agenda", icon: Calendar, disabled: true },
-  { href: "/reportes", label: "Reportes", icon: FileText, disabled: true },
-];
+import { Mark } from "@/components/brand/Mark";
+import { SidebarNav } from "@/components/SidebarNav";
 
 export function Sidebar() {
   return (
-    <aside className="flex w-56 flex-col border-r border-line bg-white">
-      <div className="flex h-16 items-center border-b border-line px-6">
-        <span className="font-display text-xl font-semibold text-ink">
-          Cantú
+    <aside className="flex w-[232px] shrink-0 flex-col border-r border-cream-200 bg-cream-50 px-[18px] py-7">
+      <div className="mb-7 flex items-center gap-3.5 px-2">
+        <Mark size={30} color="var(--ink-900)" />
+        <div className="h-[22px] w-px bg-cream-300" />
+        <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-500">
+          Propiedades
         </span>
       </div>
-      <nav className="flex flex-1 flex-col gap-1 p-4">
-        {items.map((item) => {
-          const Icon = item.icon;
-          if (item.disabled) {
-            return (
-              <span
-                key={item.href}
-                className="flex cursor-not-allowed items-center gap-3 rounded-md px-3 py-2 text-sm text-ink/30"
-                title="Próximamente"
-              >
-                <Icon size={16} />
-                {item.label}
-              </span>
-            );
-          }
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-ink/70 hover:bg-line/30 hover:text-ink"
-            >
-              <Icon size={16} />
-              {item.label}
-            </Link>
-          );
-        })}
-      </nav>
-      <div className="border-t border-line p-4 text-xs text-ink/40">
-        JS80 · v0.1
+
+      <SidebarNav />
+
+      <div className="mt-auto px-2">
+        <div className="font-mono text-[9px] uppercase tracking-[0.16em] text-ink-400">
+          v0.1 · Coghlan
+        </div>
       </div>
     </aside>
   );

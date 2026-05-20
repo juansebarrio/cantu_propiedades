@@ -1,5 +1,10 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { Mark } from "@/components/brand/Mark";
+import { Wordmark } from "@/components/brand/Wordmark";
+import { Field } from "@/components/ui/Field";
+import { Input } from "@/components/ui/Input";
+import { Button } from "@/components/ui/Button";
 
 export default function LoginPage({
   searchParams,
@@ -10,10 +15,13 @@ export default function LoginPage({
     "use server";
     const email = String(formData.get("email") ?? "");
     const password = String(formData.get("password") ?? "");
-    const next = String(formData.get("next") ?? "/test-db");
+    const next = String(formData.get("next") ?? "/propiedades");
 
     const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
     if (error) {
       redirect(`/login?error=${encodeURIComponent(error.message)}`);
@@ -22,48 +30,80 @@ export default function LoginPage({
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center p-8">
-      <form action={login} className="w-full max-w-sm space-y-4">
-        <h1 className="font-display text-3xl">Login</h1>
-
-        {searchParams.error && (
-          <p className="rounded border border-red-300 bg-red-50 p-2 text-sm text-red-700">
-            {searchParams.error}
-          </p>
-        )}
-
-        <input
-          name="email"
-          type="email"
-          placeholder="email"
-          autoComplete="email"
-          required
-          className="w-full rounded border border-line bg-white px-3 py-2"
-        />
-        <input
-          name="password"
-          type="password"
-          placeholder="password"
-          autoComplete="current-password"
-          required
-          className="w-full rounded border border-line bg-white px-3 py-2"
-        />
-        <input type="hidden" name="next" value={searchParams.next ?? "/test-db"} />
-
-        <button
-          type="submit"
-          className="w-full rounded bg-ink px-3 py-2 text-paper hover:opacity-90"
-        >
-          Entrar
-        </button>
-
-        <div className="space-y-1 pt-4 text-xs text-ink/50">
-          <p className="font-semibold">Usuarios de prueba (seed):</p>
-          <p>zulma@cantu.local · zulma123 · socia titular</p>
-          <p>martin@cantu.local · martin123 · socio operativo</p>
-          <p>carolina@cantu.local · carolina123 · administrativa</p>
+    <main className="flex min-h-screen items-center justify-center bg-cream-50 px-6 py-12">
+      <div className="w-full max-w-sm">
+        <div className="mb-12 flex flex-col items-center gap-4">
+          <Mark size={56} color="var(--ink-900)" />
+          <Wordmark size={56} color="var(--ink-900)" />
+          <span className="font-mono text-[10px] uppercase tracking-[0.32em] text-ink-500">
+            Propiedades · Coghlan
+          </span>
         </div>
-      </form>
+
+        <div className="rounded-md border border-ink-100 bg-white p-7">
+          <h1 className="mb-1 font-display text-2xl tracking-tight text-ink-900">
+            Iniciar sesión
+          </h1>
+          <p className="mb-6 text-[13px] text-ink-500">
+            Ingresá con el email y contraseña que te dieron.
+          </p>
+
+          <form action={login} className="flex flex-col gap-4">
+            {searchParams.error && (
+              <div className="rounded-sm bg-brick-50 px-3 py-2 text-[13px] text-brick-700">
+                {searchParams.error}
+              </div>
+            )}
+
+            <Field label="Email" required>
+              <Input
+                name="email"
+                type="email"
+                placeholder="zulma@cantu.local"
+                autoComplete="email"
+                required
+                autoFocus
+              />
+            </Field>
+
+            <Field label="Contraseña" required>
+              <Input
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                required
+              />
+            </Field>
+
+            <input
+              type="hidden"
+              name="next"
+              value={searchParams.next ?? "/propiedades"}
+            />
+
+            <Button type="submit" className="mt-2 w-full">
+              Entrar
+            </Button>
+          </form>
+
+          <div className="mt-6 border-t border-cream-200 pt-4">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-ink-400">
+              Usuarios de prueba (seed)
+            </p>
+            <ul className="mt-2 space-y-0.5 text-[11px] text-ink-500">
+              <li>zulma@cantu.local · zulma123</li>
+              <li>martin@cantu.local · martin123</li>
+              <li>carolina@cantu.local · carolina123</li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="mt-8 text-center">
+          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-400">
+            JS80 · Estudio de soluciones digitales
+          </p>
+        </div>
+      </div>
     </main>
   );
 }
