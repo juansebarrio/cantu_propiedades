@@ -60,7 +60,7 @@ export default function LoginPage({
               <Input
                 name="email"
                 type="email"
-                placeholder="martin@cantu.local"
+                placeholder="zulma@cantu.local"
                 autoComplete="email"
                 required
                 autoFocus
