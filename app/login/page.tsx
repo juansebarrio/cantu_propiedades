@@ -5,6 +5,7 @@ import { Wordmark } from "@/components/brand/Wordmark";
 import { Field } from "@/components/ui/Field";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import { DemoLoginButtons } from "./demo-login-buttons";
 
 export default function LoginPage({
   searchParams,
@@ -86,17 +87,24 @@ export default function LoginPage({
             </Button>
           </form>
 
-          <div className="mt-6 border-t border-cream-200 pt-4">
-            <p className="font-mono text-[10px] uppercase tracking-widest text-ink-400">
-              Usuarios de prueba (seed)
-            </p>
-            <ul className="mt-2 space-y-0.5 text-[11px] text-ink-500">
-              <li>zulma@cantu.local · zulma123</li>
-              <li>martin@cantu.local · martin123</li>
-              <li>carolina@cantu.local · carolina123</li>
-            </ul>
-          </div>
         </div>
+
+        {/* Separador */}
+        <div className="my-8 flex items-center gap-4">
+          <div className="h-px flex-1 bg-cream-300" />
+          <span className="font-mono text-[10px] uppercase tracking-widest text-ink-400">
+            o probá la demo
+          </span>
+          <div className="h-px flex-1 bg-cream-300" />
+        </div>
+
+        {/* Botones de demo */}
+        <DemoLoginButtons />
+
+        {/* Disclaimer */}
+        <p className="mt-4 text-center font-mono text-[10px] uppercase tracking-widest text-ink-400">
+          Datos ficticios · caso simulado por confidencialidad
+        </p>
 
         <div className="mt-8 text-center">
           <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-400">
