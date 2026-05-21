@@ -13,19 +13,6 @@ function getAdminClient() {
   );
 }
 
-// Orden inverso de dependencia · primero las hijas, después las padres.
-// Names match el schema real (no `consultas`, sino `consultas_lead`; etc).
-const TABLAS_A_LIMPIAR = [
-  "visitas", // RESTRICT a leads + propiedades · debe ir primero
-  "comunicaciones", // cascade desde leads/duenos
-  "consultas_lead", // cascade desde leads/propiedades
-  "reportes_mensuales", // cascade desde propiedades/duenos
-  "portales_propiedad", // cascade desde propiedades
-  "leads", // ya sin dependientes
-  "propiedades", // depende de duenos
-  "duenos", // raíz operativa
-] as const;
-
 export async function GET(request: Request) {
   const authHeader = request.headers.get("authorization");
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
@@ -40,32 +27,23 @@ export async function GET(request: Request) {
   const stats: Record<string, number | string> = {};
 
   try {
-    // PASO 1 · Vaciar tablas operativas
-    for (const tabla of TABLAS_A_LIMPIAR) {
-      const { error } = await supabase
-        .from(tabla)
-        .delete()
-        .neq("id", "00000000-0000-0000-0000-000000000000");
-      if (error) {
-        throw new Error(`Error vaciando ${tabla}: ${error.message}`);
-      }
-      stats[`delete_${tabla}`] = "ok";
+    // Delete + reseed corren en una sola transacción dentro de la función
+    // SQL. Si seed_demo_data() no existe o falla, el DELETE se revierte
+    // y la base queda con los datos previos (no como antes, que el
+    // delete iba aparte y dejaba la base vacía si el seed fallaba).
+    const { error } = await supabase.rpc("reset_and_seed_demo_data");
+    if (error) {
+      throw new Error(`reset_and_seed_demo_data() falló: ${error.message}`);
     }
+    stats["reset_and_seed"] = "ok";
 
-    // PASO 2 · Resembrar via función SQL
-    const { error: seedError } = await supabase.rpc("seed_demo_data");
-    if (seedError) {
-      throw new Error(`seed_demo_data() falló: ${seedError.message}`);
-    }
-    stats["seed_demo_data"] = "ok";
-
-    // PASO 3 · Verificación de counts
+    // Verificación de counts post-reseed
     const tablasVerificar = ["duenos", "propiedades", "leads", "visitas"];
     for (const t of tablasVerificar) {
-      const { count, error } = await supabase
+      const { count, error: countError } = await supabase
         .from(t)
         .select("*", { count: "exact", head: true });
-      if (!error) stats[`count_${t}`] = count ?? 0;
+      if (!countError) stats[`count_${t}`] = count ?? 0;
     }
 
     const duracionMs = Date.now() - empezo;
