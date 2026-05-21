@@ -173,96 +173,98 @@ export default async function LeadsPage({
         </Card>
       ) : (
         <Card className="overflow-hidden p-0">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-ink-200">
-                <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
-                  Lead
-                </th>
-                <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
-                  Teléfono
-                </th>
-                <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
-                  Propiedad
-                </th>
-                <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
-                  Origen
-                </th>
-                <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
-                  Estado
-                </th>
-                <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
-                  Responsable
-                </th>
-                <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
-                  Próxima acción
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {leads.map((l: any) => (
-                <tr
-                  key={l.id}
-                  className="border-b border-cream-200 transition-colors last:border-0 hover:bg-cream-100"
-                >
-                  <td className="px-4 py-4">
-                    <Link
-                      href={`/leads/${l.id}`}
-                      className="block hover:text-brick-600"
-                    >
-                      <div className="font-display text-[17px] text-ink-900">
-                        {l.nombre}
-                      </div>
-                      {l.email && (
-                        <div className="mt-0.5 font-mono text-[10px] uppercase tracking-widest text-ink-500">
-                          {l.email}
-                        </div>
-                      )}
-                    </Link>
-                  </td>
-                  <td className="px-4 py-4 font-mono text-sm text-ink-700">
-                    {l.telefono ?? "—"}
-                  </td>
-                  <td className="px-4 py-4 text-sm text-ink-700">
-                    {l.propiedad?.direccion ?? (
-                      <span className="italic text-ink-400">general</span>
-                    )}
-                  </td>
-                  <td className="px-4 py-4">
-                    {l.canal_origen === "referido_zulma" ? (
-                      <Badge tone="plum">Referido por Zulma</Badge>
-                    ) : (
-                      <Badge tone="slate" dot={false}>
-                        {l.canal_origen.replace(/_/g, " ")}
-                      </Badge>
-                    )}
-                  </td>
-                  <td className="px-4 py-4">
-                    <Badge tone={tonoParaEstado(l.estado)}>
-                      {l.estado.replace(/_/g, " ")}
-                    </Badge>
-                  </td>
-                  <td className="px-4 py-4 text-sm text-ink-700">
-                    {l.responsable?.nombre ?? "—"}
-                  </td>
-                  <td className="px-4 py-4">
-                    {l.proxima_accion ? (
-                      <>
-                        <div className="text-sm text-ink-700">
-                          {l.proxima_accion}
-                        </div>
-                        <div className="font-mono text-[10px] uppercase tracking-widest text-ink-500">
-                          {formatearFecha(l.fecha_proxima_accion)}
-                        </div>
-                      </>
-                    ) : (
-                      <span className="text-ink-400">—</span>
-                    )}
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[640px]">
+              <thead>
+                <tr className="border-b border-ink-200">
+                  <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                    Lead
+                  </th>
+                  <th className="hidden whitespace-nowrap px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500 md:table-cell">
+                    Teléfono
+                  </th>
+                  <th className="hidden px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500 md:table-cell">
+                    Propiedad
+                  </th>
+                  <th className="hidden px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500 xl:table-cell">
+                    Origen
+                  </th>
+                  <th className="whitespace-nowrap px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                    Estado
+                  </th>
+                  <th className="hidden px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500 lg:table-cell">
+                    Responsable
+                  </th>
+                  <th className="hidden px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500 lg:table-cell">
+                    Próxima acción
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {leads.map((l: any) => (
+                  <tr
+                    key={l.id}
+                    className="border-b border-cream-200 transition-colors last:border-0 hover:bg-cream-100"
+                  >
+                    <td className="px-4 py-4">
+                      <Link
+                        href={`/leads/${l.id}`}
+                        className="block hover:text-brick-600"
+                      >
+                        <div className="font-display text-[17px] text-ink-900">
+                          {l.nombre}
+                        </div>
+                        {l.email && (
+                          <div className="mt-0.5 font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                            {l.email}
+                          </div>
+                        )}
+                      </Link>
+                    </td>
+                    <td className="hidden whitespace-nowrap px-4 py-4 font-mono text-sm text-ink-700 md:table-cell">
+                      {l.telefono ?? "—"}
+                    </td>
+                    <td className="hidden px-4 py-4 text-sm text-ink-700 md:table-cell">
+                      {l.propiedad?.direccion ?? (
+                        <span className="italic text-ink-400">general</span>
+                      )}
+                    </td>
+                    <td className="hidden px-4 py-4 xl:table-cell">
+                      {l.canal_origen === "referido_zulma" ? (
+                        <Badge tone="plum">Referido por Zulma</Badge>
+                      ) : (
+                        <Badge tone="slate" dot={false}>
+                          {l.canal_origen.replace(/_/g, " ")}
+                        </Badge>
+                      )}
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-4">
+                      <Badge tone={tonoParaEstado(l.estado)}>
+                        {l.estado.replace(/_/g, " ")}
+                      </Badge>
+                    </td>
+                    <td className="hidden whitespace-nowrap px-4 py-4 text-sm text-ink-700 lg:table-cell">
+                      {l.responsable?.nombre ?? "—"}
+                    </td>
+                    <td className="hidden px-4 py-4 lg:table-cell">
+                      {l.proxima_accion ? (
+                        <>
+                          <div className="text-sm text-ink-700">
+                            {l.proxima_accion}
+                          </div>
+                          <div className="whitespace-nowrap font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                            {formatearFecha(l.fecha_proxima_accion)}
+                          </div>
+                        </>
+                      ) : (
+                        <span className="text-ink-400">—</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </Card>
       )}
     </div>

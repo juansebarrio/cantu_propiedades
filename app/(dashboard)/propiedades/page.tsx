@@ -167,76 +167,78 @@ export default async function PropiedadesPage({
         </Card>
       ) : (
         <Card className="overflow-hidden p-0">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-ink-200">
-                <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
-                  Propiedad
-                </th>
-                <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
-                  Operación
-                </th>
-                <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
-                  Estado
-                </th>
-                <th className="px-4 py-3 text-right font-mono text-[10px] uppercase tracking-widest text-ink-500">
-                  Precio
-                </th>
-                <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
-                  Dueño
-                </th>
-                <th className="px-4 py-3 text-right font-mono text-[10px] uppercase tracking-widest text-ink-500">
-                  Días
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {propiedades.map((p: any) => (
-                <tr
-                  key={p.id}
-                  className="border-b border-cream-200 transition-colors last:border-0 hover:bg-cream-100"
-                >
-                  <td className="px-4 py-4">
-                    <Link
-                      href={`/propiedades/${p.id}`}
-                      className="block hover:text-brick-600"
-                    >
-                      <div className="flex items-center gap-2">
-                        <span className="font-display text-[17px] text-ink-900">
-                          {p.direccion}
-                        </span>
-                        {p.confidencial && (
-                          <Badge tone="brick" dot={false}>
-                            Confidencial
-                          </Badge>
-                        )}
-                      </div>
-                      <div className="mt-0.5 font-mono text-[10px] uppercase tracking-widest text-ink-500">
-                        {p.tipo}
-                      </div>
-                    </Link>
-                  </td>
-                  <td className="px-4 py-4 text-sm capitalize text-ink-700">
-                    {p.operacion}
-                  </td>
-                  <td className="px-4 py-4">
-                    <Badge tone={tonoParaEstado(p.estado)}>
-                      {p.estado.replace(/_/g, " ")}
-                    </Badge>
-                  </td>
-                  <td className="num px-4 py-4 text-right font-display text-base text-ink-900">
-                    {formatearPrecio(p.precio_actual, p.moneda)}
-                  </td>
-                  <td className="px-4 py-4 text-sm text-ink-700">
-                    {p.dueno?.nombre ?? "—"}
-                  </td>
-                  <td className="num px-4 py-4 text-right font-mono text-sm text-ink-500">
-                    {diasDesde(p.fecha_captacion)}
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[560px]">
+              <thead>
+                <tr className="border-b border-ink-200">
+                  <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                    Propiedad
+                  </th>
+                  <th className="hidden whitespace-nowrap px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500 md:table-cell">
+                    Operación
+                  </th>
+                  <th className="whitespace-nowrap px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                    Estado
+                  </th>
+                  <th className="whitespace-nowrap px-4 py-3 text-right font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                    Precio
+                  </th>
+                  <th className="hidden px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500 lg:table-cell">
+                    Dueño
+                  </th>
+                  <th className="hidden whitespace-nowrap px-4 py-3 text-right font-mono text-[10px] uppercase tracking-widest text-ink-500 xl:table-cell">
+                    Días
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {propiedades.map((p: any) => (
+                  <tr
+                    key={p.id}
+                    className="border-b border-cream-200 transition-colors last:border-0 hover:bg-cream-100"
+                  >
+                    <td className="px-4 py-4">
+                      <Link
+                        href={`/propiedades/${p.id}`}
+                        className="block hover:text-brick-600"
+                      >
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="font-display text-[17px] text-ink-900">
+                            {p.direccion}
+                          </span>
+                          {p.confidencial && (
+                            <Badge tone="brick" dot={false}>
+                              Confidencial
+                            </Badge>
+                          )}
+                        </div>
+                        <div className="mt-0.5 font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                          {p.tipo}
+                        </div>
+                      </Link>
+                    </td>
+                    <td className="hidden whitespace-nowrap px-4 py-4 text-sm capitalize text-ink-700 md:table-cell">
+                      {p.operacion}
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-4">
+                      <Badge tone={tonoParaEstado(p.estado)}>
+                        {p.estado.replace(/_/g, " ")}
+                      </Badge>
+                    </td>
+                    <td className="num whitespace-nowrap px-4 py-4 text-right font-display text-base text-ink-900">
+                      {formatearPrecio(p.precio_actual, p.moneda)}
+                    </td>
+                    <td className="hidden px-4 py-4 text-sm text-ink-700 lg:table-cell">
+                      {p.dueno?.nombre ?? "—"}
+                    </td>
+                    <td className="num hidden whitespace-nowrap px-4 py-4 text-right font-mono text-sm text-ink-500 xl:table-cell">
+                      {diasDesde(p.fecha_captacion)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </Card>
       )}
     </div>
