@@ -113,6 +113,30 @@ BEGIN
     ('bbbbbbbb-0001-0000-0000-000000000001', 'aaaaaaaa-0001-0000-0000-000000000001', '2026-04-01', 'enviado',   'Mariana, gran mes. Hay interés concreto en el de Av. Congreso, te llamo esta semana para conversar.', 'mail'),
     ('bbbbbbbb-0001-0000-0000-000000000002', 'aaaaaaaa-0001-0000-0000-000000000002', '2026-04-01', 'enviado',   'Roberto, seguimos con buen flujo de consultas. La cocina chica sigue siendo el principal objection. ¿Lo conversamos?', 'whatsapp_pdf'),
     ('bbbbbbbb-0001-0000-0000-000000000005', 'aaaaaaaa-0001-0000-0000-000000000004', '2026-04-01', 'no_enviar', NULL, 'llamada');
+
+  -- ──────────────────────────────────────────────────────────────────
+  -- NOVEDADES (tablón de mensajes asincrónicos entre socios)
+  -- ──────────────────────────────────────────────────────────────────
+  -- Solo se insertan si la tabla existe (puede que un cloud antiguo no
+  -- haya corrido la migration 20260521150000_novedades.sql todavía).
+  IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema='public' AND table_name='novedades') THEN
+    -- Limpia novedades previas para no duplicar en cada reset
+    DELETE FROM public.novedades;
+
+    INSERT INTO public.novedades (contenido, autor_id, vista_por, creado_en) VALUES
+      ('El dueño de Cabildo 2840 quiere subir el precio publicado. Llamarlo el lunes para conversar.',
+       v_martin_id,
+       ARRAY[v_zulma_id]::uuid[],
+       now() - interval '2 hours'),
+      ('Reagendé la visita de Holmberg con María González. Confirmar el jueves antes de las 18.',
+       v_zulma_id,
+       ARRAY[v_martin_id, v_carolina_id]::uuid[],
+       now() - interval '1 day'),
+      ('El contador pidió el cierre del mes para el viernes. Necesito los comprobantes de comisiones de mayo.',
+       v_carolina_id,
+       ARRAY[v_zulma_id, v_martin_id]::uuid[],
+       now() - interval '3 days');
+  END IF;
 END;
 $$;
 

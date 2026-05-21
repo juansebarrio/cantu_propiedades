@@ -31,5 +31,5 @@ export async function iniciarSesionDemo(usuario: DemoUser) {
     };
   }
 
-  redirect("/propiedades");
+  redirect("/tablero");
 }

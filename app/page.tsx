@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/Button";
 
 export default async function Home() {
   const usuario = await getUsuarioActual();
-  if (usuario) redirect("/propiedades");
+  if (usuario) redirect("/tablero");
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-cream-50 px-6 py-12">

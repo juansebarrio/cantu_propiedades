@@ -16,7 +16,7 @@ export default function LoginPage({
     "use server";
     const email = String(formData.get("email") ?? "");
     const password = String(formData.get("password") ?? "");
-    const next = String(formData.get("next") ?? "/propiedades");
+    const next = String(formData.get("next") ?? "/tablero");
 
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithPassword({
@@ -79,7 +79,7 @@ export default function LoginPage({
             <input
               type="hidden"
               name="next"
-              value={searchParams.next ?? "/propiedades"}
+              value={searchParams.next ?? "/tablero"}
             />
 
             <Button type="submit" className="mt-2 w-full">
