@@ -3,10 +3,11 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
-// Credenciales hardcoded de los 3 usuarios del seed.
-// Como esto vive en el servidor (Server Action), las credenciales no se exponen al cliente.
+// Credenciales hardcoded de los usuarios del seed.
+// Zulma queda fuera de la demo pública por ahora.
+// Como esto vive en el servidor (Server Action), las credenciales no se
+// exponen al cliente.
 const DEMO_USERS = {
-  zulma: { email: "zulma@cantu.local", password: "zulma123" },
   martin: { email: "martin@cantu.local", password: "martin123" },
   carolina: { email: "carolina@cantu.local", password: "carolina123" },
 } as const;

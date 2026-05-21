@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { iniciarSesionDemo } from "./demo-actions";
 import { Loader2 } from "lucide-react";
 
-type DemoUser = "zulma" | "martin" | "carolina";
+type DemoUser = "martin" | "carolina";
 
 const USERS: Array<{
   id: DemoUser;
@@ -12,7 +12,6 @@ const USERS: Array<{
   rol: string;
   inicial: string;
 }> = [
-  { id: "zulma", nombre: "Zulma Cantú", rol: "Socia titular", inicial: "Z" },
   { id: "martin", nombre: "Martín Larrea", rol: "Socio operativo", inicial: "M" },
   { id: "carolina", nombre: "Carolina Méndez", rol: "Administrativa", inicial: "C" },
 ];
