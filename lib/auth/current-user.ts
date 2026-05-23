@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
 import type { Database } from "@/lib/supabase/database.types";
 
@@ -10,7 +11,7 @@ export type UsuarioActual = {
   email: string;
 };
 
-export async function getUsuarioActual(): Promise<UsuarioActual | null> {
+async function _getUsuarioActual(): Promise<UsuarioActual | null> {
   const supabase = createClient();
   const {
     data: { user },
@@ -26,6 +27,15 @@ export async function getUsuarioActual(): Promise<UsuarioActual | null> {
 
   return perfil ?? null;
 }
+
+// React.cache() dedup el llamado dentro de un mismo render: layout + page
+// pegan a Supabase una sola vez en vez de dos · evita race de refresh-token.
+// Rollback: setear AUTH_DEDUPE_DISABLED=true en Vercel para volver al
+// comportamiento anterior (una llamada por invocación).
+export const getUsuarioActual: typeof _getUsuarioActual =
+  process.env.AUTH_DEDUPE_DISABLED === "true"
+    ? _getUsuarioActual
+    : cache(_getUsuarioActual);
 
 export function puedeVerAcuerdoEspecial(rol: RolUsuario): boolean {
   return rol === "socia_titular";
