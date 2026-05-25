@@ -206,7 +206,7 @@ export function LeadFormNuevo({
       }}
       className="space-y-5"
     >
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Field label="Nombre" error={fieldErrors.nombre} required>
           <Input name="nombre" required placeholder="Nombre y apellido" />
         </Field>
@@ -222,7 +222,7 @@ export function LeadFormNuevo({
               {chequeando && (
                 <Loader2
                   size={14}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 animate-spin text-ink/40"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 animate-spin text-ink-400"
                 />
               )}
             </div>
@@ -263,7 +263,11 @@ export function LeadFormNuevo({
                       </div>
                     </div>
                     <div className="flex gap-2">
-                      <Link href={`/leads/${d.id}`} target="_blank">
+                      <Link
+                        href={`/leads/${d.id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         <Button type="button" variant="ghost" size="sm">
                           Ver ficha
                         </Button>
@@ -291,7 +295,7 @@ export function LeadFormNuevo({
         <Input name="email" type="email" placeholder="email@ejemplo.com" />
       </Field>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Field label="Propiedad de interés (opcional)">
           <Select name="propiedad_id">
             <option value="">Sin propiedad asignada (búsqueda general)</option>
@@ -341,7 +345,7 @@ export function LeadFormNuevo({
         </Field>
       )}
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Field label="Responsable">
           <Select name="responsable_id">
             <option value="">Sin asignar</option>
@@ -375,7 +379,7 @@ export function LeadFormNuevo({
       </Field>
 
       {errorGeneral && (
-        <div className="rounded-md bg-red-50 px-4 py-3 text-sm text-red-800">
+        <div className="rounded-md bg-brick-50 px-4 py-3 text-sm text-brick-700">
           {errorGeneral}
         </div>
       )}

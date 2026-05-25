@@ -23,6 +23,7 @@ export const Select = forwardRef<
     <ChevronDown
       size={16}
       strokeWidth={1.5}
+      aria-hidden="true"
       className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-ink-500"
     />
   </div>

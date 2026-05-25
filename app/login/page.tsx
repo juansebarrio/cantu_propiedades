@@ -7,6 +7,23 @@ import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { DemoLoginButtons } from "./demo-login-buttons";
 
+const ERRORES_LOGIN: Record<string, string> = {
+  "Invalid login credentials": "Email o contraseña incorrectos.",
+  "Email not confirmed": "Tenés que confirmar tu email antes de entrar.",
+  "Too many requests":
+    "Demasiados intentos. Esperá unos minutos y volvé a probar.",
+};
+
+function traducirError(mensaje: string): string {
+  return ERRORES_LOGIN[mensaje] ?? "No pudimos iniciar tu sesión. Probá de nuevo.";
+}
+
+// Solo permitimos paths internos. Bloquea `//evil.com` y `http://...`.
+function rutaInternaSegura(next: string): string {
+  if (!next.startsWith("/") || next.startsWith("//")) return "/tablero";
+  return next;
+}
+
 export default function LoginPage({
   searchParams,
 }: {
@@ -16,7 +33,7 @@ export default function LoginPage({
     "use server";
     const email = String(formData.get("email") ?? "");
     const password = String(formData.get("password") ?? "");
-    const next = String(formData.get("next") ?? "/tablero");
+    const next = rutaInternaSegura(String(formData.get("next") ?? "/tablero"));
 
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithPassword({
@@ -29,6 +46,11 @@ export default function LoginPage({
     }
     redirect(next);
   }
+
+  const errorTraducido = searchParams.error
+    ? traducirError(searchParams.error)
+    : null;
+  const nextSafe = rutaInternaSegura(searchParams.next ?? "/tablero");
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-cream-50 px-6 py-12">
@@ -50,9 +72,9 @@ export default function LoginPage({
           </p>
 
           <form action={login} className="flex flex-col gap-4">
-            {searchParams.error && (
+            {errorTraducido && (
               <div className="rounded-sm bg-brick-50 px-3 py-2 text-[13px] text-brick-700">
-                {searchParams.error}
+                {errorTraducido}
               </div>
             )}
 
@@ -76,11 +98,7 @@ export default function LoginPage({
               />
             </Field>
 
-            <input
-              type="hidden"
-              name="next"
-              value={searchParams.next ?? "/tablero"}
-            />
+            <input type="hidden" name="next" value={nextSafe} />
 
             <Button type="submit" className="mt-2 w-full">
               Entrar
