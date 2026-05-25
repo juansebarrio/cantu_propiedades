@@ -1,0 +1,284 @@
+[
+  {
+    "breakpoint": "desktop",
+    "route": "/",
+    "requestedUrl": "http://localhost:3000/",
+    "finalUrl": "http://localhost:3000/",
+    "status": 200,
+    "durationMs": 799,
+    "screenshot": "reportes/qa-2026-05-25/screenshots/01-landing-desktop.png",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "requestFailures": [],
+    "httpErrors": []
+  },
+  {
+    "breakpoint": "desktop",
+    "route": "/login",
+    "requestedUrl": "http://localhost:3000/login",
+    "finalUrl": "http://localhost:3000/login",
+    "status": 200,
+    "durationMs": 756,
+    "screenshot": "reportes/qa-2026-05-25/screenshots/02-login-desktop.png",
+    "consoleErrors": [],
+    "requestFailures": [],
+    "httpErrors": []
+  },
+  {
+    "breakpoint": "desktop",
+    "route": "/login?error=Invalid+login+credentials",
+    "requestedUrl": "http://localhost:3000/login?error=Invalid+login+credentials",
+    "finalUrl": "http://localhost:3000/login?error=Invalid+login+credentials",
+    "status": 200,
+    "durationMs": 762,
+    "screenshot": "reportes/qa-2026-05-25/screenshots/02b-login-with-error-desktop.png",
+    "consoleErrors": [],
+    "requestFailures": [],
+    "httpErrors": []
+  },
+  {
+    "breakpoint": "desktop",
+    "route": "/login?next=%2Ftablero",
+    "requestedUrl": "http://localhost:3000/login?next=%2Ftablero",
+    "finalUrl": "http://localhost:3000/login?next=%2Ftablero",
+    "status": 200,
+    "durationMs": 763,
+    "screenshot": "reportes/qa-2026-05-25/screenshots/02c-login-with-next-desktop.png",
+    "consoleErrors": [],
+    "requestFailures": [],
+    "httpErrors": []
+  },
+  {
+    "breakpoint": "desktop",
+    "route": "/tablero",
+    "requestedUrl": "http://localhost:3000/tablero",
+    "finalUrl": "http://localhost:3000/login",
+    "status": 200,
+    "durationMs": 1223,
+    "screenshot": "reportes/qa-2026-05-25/screenshots/03-tablero-protected-desktop.png",
+    "consoleErrors": [],
+    "requestFailures": [],
+    "httpErrors": []
+  },
+  {
+    "breakpoint": "desktop",
+    "route": "/propiedades",
+    "requestedUrl": "http://localhost:3000/propiedades",
+    "finalUrl": "http://localhost:3000/login",
+    "status": 200,
+    "durationMs": 1230,
+    "screenshot": "reportes/qa-2026-05-25/screenshots/04-propiedades-protected-desktop.png",
+    "consoleErrors": [],
+    "requestFailures": [],
+    "httpErrors": []
+  },
+  {
+    "breakpoint": "desktop",
+    "route": "/leads",
+    "requestedUrl": "http://localhost:3000/leads",
+    "finalUrl": "http://localhost:3000/login",
+    "status": 200,
+    "durationMs": 1052,
+    "screenshot": "reportes/qa-2026-05-25/screenshots/05-leads-protected-desktop.png",
+    "consoleErrors": [],
+    "requestFailures": [],
+    "httpErrors": []
+  },
+  {
+    "breakpoint": "desktop",
+    "route": "/leads/nuevo",
+    "requestedUrl": "http://localhost:3000/leads/nuevo",
+    "finalUrl": "http://localhost:3000/login",
+    "status": 200,
+    "durationMs": 874,
+    "screenshot": "reportes/qa-2026-05-25/screenshots/06-leads-nuevo-protected-desktop.png",
+    "consoleErrors": [],
+    "requestFailures": [],
+    "httpErrors": []
+  },
+  {
+    "breakpoint": "desktop",
+    "route": "/agenda",
+    "requestedUrl": "http://localhost:3000/agenda",
+    "finalUrl": "http://localhost:3000/login",
+    "status": 200,
+    "durationMs": 786,
+    "screenshot": "reportes/qa-2026-05-25/screenshots/07-agenda-protected-desktop.png",
+    "consoleErrors": [],
+    "requestFailures": [],
+    "httpErrors": []
+  },
+  {
+    "breakpoint": "desktop",
+    "route": "/reportes",
+    "requestedUrl": "http://localhost:3000/reportes",
+    "finalUrl": "http://localhost:3000/reportes",
+    "status": 404,
+    "durationMs": 764,
+    "screenshot": "reportes/qa-2026-05-25/screenshots/08-reportes-protected-desktop.png",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "requestFailures": [],
+    "httpErrors": [
+      "404 http://localhost:3000/reportes"
+    ]
+  },
+  {
+    "breakpoint": "desktop",
+    "route": "/ruta-que-no-existe",
+    "requestedUrl": "http://localhost:3000/ruta-que-no-existe",
+    "finalUrl": "http://localhost:3000/ruta-que-no-existe",
+    "status": 404,
+    "durationMs": 760,
+    "screenshot": "reportes/qa-2026-05-25/screenshots/09-404-custom-desktop.png",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "requestFailures": [],
+    "httpErrors": [
+      "404 http://localhost:3000/ruta-que-no-existe"
+    ]
+  },
+  {
+    "breakpoint": "mobile",
+    "route": "/",
+    "requestedUrl": "http://localhost:3000/",
+    "finalUrl": "http://localhost:3000/",
+    "status": 200,
+    "durationMs": 751,
+    "screenshot": "reportes/qa-2026-05-25/screenshots/01-landing-mobile.png",
+    "consoleErrors": [],
+    "requestFailures": [],
+    "httpErrors": []
+  },
+  {
+    "breakpoint": "mobile",
+    "route": "/login",
+    "requestedUrl": "http://localhost:3000/login",
+    "finalUrl": "http://localhost:3000/login",
+    "status": 200,
+    "durationMs": 758,
+    "screenshot": "reportes/qa-2026-05-25/screenshots/02-login-mobile.png",
+    "consoleErrors": [],
+    "requestFailures": [],
+    "httpErrors": []
+  },
+  {
+    "breakpoint": "mobile",
+    "route": "/login?error=Invalid+login+credentials",
+    "requestedUrl": "http://localhost:3000/login?error=Invalid+login+credentials",
+    "finalUrl": "http://localhost:3000/login?error=Invalid+login+credentials",
+    "status": 200,
+    "durationMs": 751,
+    "screenshot": "reportes/qa-2026-05-25/screenshots/02b-login-with-error-mobile.png",
+    "consoleErrors": [],
+    "requestFailures": [],
+    "httpErrors": []
+  },
+  {
+    "breakpoint": "mobile",
+    "route": "/login?next=%2Ftablero",
+    "requestedUrl": "http://localhost:3000/login?next=%2Ftablero",
+    "finalUrl": "http://localhost:3000/login?next=%2Ftablero",
+    "status": 200,
+    "durationMs": 743,
+    "screenshot": "reportes/qa-2026-05-25/screenshots/02c-login-with-next-mobile.png",
+    "consoleErrors": [],
+    "requestFailures": [],
+    "httpErrors": []
+  },
+  {
+    "breakpoint": "mobile",
+    "route": "/tablero",
+    "requestedUrl": "http://localhost:3000/tablero",
+    "finalUrl": "http://localhost:3000/login",
+    "status": 200,
+    "durationMs": 785,
+    "screenshot": "reportes/qa-2026-05-25/screenshots/03-tablero-protected-mobile.png",
+    "consoleErrors": [],
+    "requestFailures": [],
+    "httpErrors": []
+  },
+  {
+    "breakpoint": "mobile",
+    "route": "/propiedades",
+    "requestedUrl": "http://localhost:3000/propiedades",
+    "finalUrl": "http://localhost:3000/login",
+    "status": 200,
+    "durationMs": 783,
+    "screenshot": "reportes/qa-2026-05-25/screenshots/04-propiedades-protected-mobile.png",
+    "consoleErrors": [],
+    "requestFailures": [],
+    "httpErrors": []
+  },
+  {
+    "breakpoint": "mobile",
+    "route": "/leads",
+    "requestedUrl": "http://localhost:3000/leads",
+    "finalUrl": "http://localhost:3000/login",
+    "status": 200,
+    "durationMs": 766,
+    "screenshot": "reportes/qa-2026-05-25/screenshots/05-leads-protected-mobile.png",
+    "consoleErrors": [],
+    "requestFailures": [],
+    "httpErrors": []
+  },
+  {
+    "breakpoint": "mobile",
+    "route": "/leads/nuevo",
+    "requestedUrl": "http://localhost:3000/leads/nuevo",
+    "finalUrl": "http://localhost:3000/login",
+    "status": 200,
+    "durationMs": 781,
+    "screenshot": "reportes/qa-2026-05-25/screenshots/06-leads-nuevo-protected-mobile.png",
+    "consoleErrors": [],
+    "requestFailures": [],
+    "httpErrors": []
+  },
+  {
+    "breakpoint": "mobile",
+    "route": "/agenda",
+    "requestedUrl": "http://localhost:3000/agenda",
+    "finalUrl": "http://localhost:3000/login",
+    "status": 200,
+    "durationMs": 789,
+    "screenshot": "reportes/qa-2026-05-25/screenshots/07-agenda-protected-mobile.png",
+    "consoleErrors": [],
+    "requestFailures": [],
+    "httpErrors": []
+  },
+  {
+    "breakpoint": "mobile",
+    "route": "/reportes",
+    "requestedUrl": "http://localhost:3000/reportes",
+    "finalUrl": "http://localhost:3000/reportes",
+    "status": 404,
+    "durationMs": 740,
+    "screenshot": "reportes/qa-2026-05-25/screenshots/08-reportes-protected-mobile.png",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "requestFailures": [],
+    "httpErrors": [
+      "404 http://localhost:3000/reportes"
+    ]
+  },
+  {
+    "breakpoint": "mobile",
+    "route": "/ruta-que-no-existe",
+    "requestedUrl": "http://localhost:3000/ruta-que-no-existe",
+    "finalUrl": "http://localhost:3000/ruta-que-no-existe",
+    "status": 404,
+    "durationMs": 739,
+    "screenshot": "reportes/qa-2026-05-25/screenshots/09-404-custom-mobile.png",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "requestFailures": [],
+    "httpErrors": [
+      "404 http://localhost:3000/ruta-que-no-existe"
+    ]
+  }
+]
