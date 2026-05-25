@@ -32,9 +32,10 @@ export function UserPill({ usuario }: { usuario: UsuarioActual }) {
       <Link
         href="/logout"
         title="Cerrar sesión"
+        aria-label="Cerrar sesión"
         className="ml-1 flex h-8 w-8 items-center justify-center rounded-sm text-ink-500 transition-colors hover:bg-cream-100 hover:text-ink-900"
       >
-        <LogOut size={14} strokeWidth={1.5} />
+        <LogOut size={14} strokeWidth={1.5} aria-hidden="true" />
       </Link>
     </div>
   );

@@ -15,7 +15,8 @@ export function Mark({
 }: Props) {
   return (
     <span
-      aria-label="ZC"
+      role="img"
+      aria-label="Logo Cantú Propiedades"
       className={clsx("inline-flex items-center justify-center", className)}
       style={{
         width: size * 1.08,

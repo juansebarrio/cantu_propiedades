@@ -74,7 +74,7 @@ export default async function PropiedadDetalle({
             <Badge tone="brick">Confidencial</Badge>
           )}
         </div>
-        <h1 className="font-display text-3xl tracking-tight text-ink-900 sm:text-5xl">
+        <h1 className="font-display text-3xl tracking-tight text-ink-900 break-words sm:text-5xl">
           {propiedad.direccion}
         </h1>
         <p className="mt-2 font-mono text-[10px] uppercase tracking-widest text-ink-500">
