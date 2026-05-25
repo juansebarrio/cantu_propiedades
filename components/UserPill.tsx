@@ -20,7 +20,7 @@ export function UserPill({ usuario }: { usuario: UsuarioActual }) {
         {inicial}
       </div>
 
-      <div className="leading-tight">
+      <div className="hidden leading-tight sm:block">
         <div className="text-[13px] font-medium text-ink-900">
           {usuario.nombre}
         </div>

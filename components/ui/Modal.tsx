@@ -54,12 +54,12 @@ export function Modal({
         if (e.target === ref.current) onClose();
       }}
       className={clsx(
-        "w-full rounded-md border border-ink-100 bg-white p-0",
+        "w-[calc(100vw-1.5rem)] max-h-[92vh] overflow-hidden rounded-md border border-ink-100 bg-white p-0",
         "backdrop:bg-ink-900/40 backdrop:backdrop-blur-[2px]",
         widthClasses[maxWidth],
       )}
     >
-      <div className="flex items-start justify-between gap-4 border-b border-cream-200 px-6 py-4">
+      <div className="flex items-start justify-between gap-4 border-b border-cream-200 px-5 py-4 sm:px-6">
         <div>
           <h2 className="font-display text-xl tracking-tight text-ink-900">
             {title}
@@ -80,7 +80,9 @@ export function Modal({
         </button>
       </div>
 
-      <div className="px-6 py-5">{children}</div>
+      <div className="max-h-[calc(92vh-4.5rem)] overflow-y-auto px-5 py-5 sm:px-6">
+        {children}
+      </div>
     </dialog>
   );
 }

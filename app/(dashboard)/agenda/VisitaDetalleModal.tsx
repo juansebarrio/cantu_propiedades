@@ -234,7 +234,7 @@ export function VisitaDetalleModal({ visita, onClose }: Props) {
             <p className="mb-3 font-mono text-[10px] uppercase tracking-widest text-amber-500">
               Reagendar visita
             </p>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <Field label="Nueva fecha" required>
                 <Input
                   type="date"

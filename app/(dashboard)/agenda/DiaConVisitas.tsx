@@ -42,7 +42,7 @@ export function DiaConVisitas({
     >
       <header
         className={clsx(
-          "flex items-baseline justify-between gap-3 border-b px-5 py-3",
+          "flex items-baseline justify-between gap-3 border-b px-4 py-3 sm:px-5",
           esDiaActual ? "border-ink-100 bg-cream-50" : "border-cream-200",
         )}
       >
@@ -81,17 +81,17 @@ export function DiaConVisitas({
               <button
                 type="button"
                 onClick={() => onClickVisita(v)}
-                className="flex w-full items-center gap-5 px-5 py-3.5 text-left transition-colors hover:bg-cream-50"
+                className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-cream-50 sm:gap-5 sm:px-5"
               >
-                <div className="num min-w-[58px] font-display text-xl tabular-nums text-ink-900">
+                <div className="num min-w-[48px] font-display text-lg tabular-nums text-ink-900 sm:min-w-[58px] sm:text-xl">
                   {horaLocalDeTimestamp(v.fecha_agendada)}
                 </div>
 
                 <div className="min-w-0 flex-1">
-                  <div className="truncate font-display text-[17px] text-ink-900">
+                  <div className="truncate font-display text-[15px] text-ink-900 sm:text-[17px]">
                     {v.propiedad?.direccion ?? "Propiedad eliminada"}
                   </div>
-                  <div className="mt-0.5 font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                  <div className="mt-0.5 truncate font-mono text-[10px] uppercase tracking-widest text-ink-500">
                     con {v.lead?.nombre ?? "lead eliminado"}
                     {v.responsable && (
                       <span className="ml-2 opacity-70">

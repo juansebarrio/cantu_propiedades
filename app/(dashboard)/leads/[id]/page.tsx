@@ -75,9 +75,9 @@ export default async function LeadDetalle({
         Volver a leads
       </Link>
 
-      <header className="mb-10 flex items-end justify-between gap-6 border-b border-cream-200 pb-8">
-        <div>
-          <div className="mb-3 flex items-center gap-2">
+      <header className="mb-6 flex flex-wrap items-end justify-between gap-4 border-b border-cream-200 pb-6 sm:mb-10 sm:gap-6 sm:pb-8">
+        <div className="min-w-0">
+          <div className="mb-3 flex flex-wrap items-center gap-2">
             <Badge tone={tonoParaEstado(lead.estado)}>
               {lead.estado.replace(/_/g, " ")}
             </Badge>
@@ -85,7 +85,7 @@ export default async function LeadDetalle({
               <Badge tone="plum">Referido por Zulma</Badge>
             )}
           </div>
-          <h1 className="font-display text-5xl tracking-tight text-ink-900">
+          <h1 className="font-display text-3xl tracking-tight text-ink-900 sm:text-5xl">
             {lead.nombre}
           </h1>
           <p className="mt-2 font-mono text-[10px] uppercase tracking-widest text-ink-500">

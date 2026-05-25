@@ -51,17 +51,14 @@ export default async function AgendaPage({
 
   return (
     <div className="mx-auto max-w-7xl">
-      <header className="mb-8 flex items-end justify-between gap-6 border-b border-cream-200 pb-6">
-        <div>
-          <h1 className="font-display text-4xl tracking-tight text-ink-900">
-            Agenda
-          </h1>
-          <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-ink-500">
-            Semana del {formatearRangoSemana(desde, hasta)} ·{" "}
-            {visitas.length}{" "}
-            {visitas.length === 1 ? "visita" : "visitas"}
-          </p>
-        </div>
+      <header className="mb-6 border-b border-cream-200 pb-5 sm:mb-8 sm:pb-6">
+        <h1 className="font-display text-3xl tracking-tight text-ink-900 sm:text-4xl">
+          Agenda
+        </h1>
+        <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-ink-500">
+          Semana del {formatearRangoSemana(desde, hasta)} · {visitas.length}{" "}
+          {visitas.length === 1 ? "visita" : "visitas"}
+        </p>
       </header>
 
       <AgendaSemanal

@@ -70,9 +70,9 @@ export default async function PropiedadesPage({
 
   return (
     <div className="mx-auto max-w-7xl">
-      <header className="mb-8 flex items-end justify-between gap-6 border-b border-cream-200 pb-6">
+      <header className="mb-6 flex flex-wrap items-end justify-between gap-4 border-b border-cream-200 pb-5 sm:mb-8 sm:gap-6 sm:pb-6">
         <div>
-          <h1 className="font-display text-4xl tracking-tight text-ink-900">
+          <h1 className="font-display text-3xl tracking-tight text-ink-900 sm:text-4xl">
             Propiedades
           </h1>
           <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-ink-500">
@@ -166,80 +166,127 @@ export default async function PropiedadesPage({
           </div>
         </Card>
       ) : (
-        <Card className="overflow-hidden p-0">
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[560px]">
-              <thead>
-                <tr className="border-b border-ink-200">
-                  <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
-                    Propiedad
-                  </th>
-                  <th className="hidden whitespace-nowrap px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500 md:table-cell">
-                    Operación
-                  </th>
-                  <th className="whitespace-nowrap px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
-                    Estado
-                  </th>
-                  <th className="whitespace-nowrap px-4 py-3 text-right font-mono text-[10px] uppercase tracking-widest text-ink-500">
-                    Precio
-                  </th>
-                  <th className="hidden px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500 lg:table-cell">
-                    Dueño
-                  </th>
-                  <th className="hidden whitespace-nowrap px-4 py-3 text-right font-mono text-[10px] uppercase tracking-widest text-ink-500 xl:table-cell">
-                    Días
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {propiedades.map((p: any) => (
-                  <tr
-                    key={p.id}
-                    className="border-b border-cream-200 transition-colors last:border-0 hover:bg-cream-100"
-                  >
-                    <td className="px-4 py-4">
-                      <Link
-                        href={`/propiedades/${p.id}`}
-                        className="block hover:text-brick-600"
-                      >
-                        <div className="flex flex-wrap items-center gap-2">
-                          <span className="font-display text-[17px] text-ink-900">
-                            {p.direccion}
-                          </span>
-                          {p.confidencial && (
-                            <Badge tone="brick" dot={false}>
-                              Confidencial
-                            </Badge>
-                          )}
-                        </div>
-                        <div className="mt-0.5 font-mono text-[10px] uppercase tracking-widest text-ink-500">
-                          {p.tipo}
-                        </div>
-                      </Link>
-                    </td>
-                    <td className="hidden whitespace-nowrap px-4 py-4 text-sm capitalize text-ink-700 md:table-cell">
-                      {p.operacion}
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-4">
-                      <Badge tone={tonoParaEstado(p.estado)}>
-                        {p.estado.replace(/_/g, " ")}
-                      </Badge>
-                    </td>
-                    <td className="num whitespace-nowrap px-4 py-4 text-right font-display text-base text-ink-900">
+        <>
+          {/* Mobile (<md): tarjetas */}
+          <ul className="flex flex-col gap-3 md:hidden">
+            {propiedades.map((p: any) => (
+              <li key={p.id}>
+                <Link
+                  href={`/propiedades/${p.id}`}
+                  className="block rounded-md border border-ink-100 bg-white px-4 py-3.5 transition-colors hover:bg-cream-50"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate font-display text-[17px] text-ink-900">
+                        {p.direccion}
+                      </div>
+                      <div className="mt-0.5 font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                        {p.tipo} · {p.operacion}
+                      </div>
+                    </div>
+                    <Badge tone={tonoParaEstado(p.estado)}>
+                      {p.estado.replace(/_/g, " ")}
+                    </Badge>
+                  </div>
+
+                  <div className="mt-3 flex items-end justify-between gap-3">
+                    <div className="num font-display text-lg tracking-tight text-ink-900">
                       {formatearPrecio(p.precio_actual, p.moneda)}
-                    </td>
-                    <td className="hidden px-4 py-4 text-sm text-ink-700 lg:table-cell">
-                      {p.dueno?.nombre ?? "—"}
-                    </td>
-                    <td className="num hidden whitespace-nowrap px-4 py-4 text-right font-mono text-sm text-ink-500 xl:table-cell">
-                      {diasDesde(p.fecha_captacion)}
-                    </td>
+                    </div>
+                    <div className="text-right font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                      {diasDesde(p.fecha_captacion)} días
+                    </div>
+                  </div>
+
+                  <div className="mt-2 flex flex-wrap items-center gap-2 text-[13px] text-ink-700">
+                    <span className="truncate">{p.dueno?.nombre ?? "—"}</span>
+                    {p.confidencial && (
+                      <Badge tone="brick" dot={false}>
+                        Confidencial
+                      </Badge>
+                    )}
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          {/* md+: tabla con columnas progresivas */}
+          <Card className="hidden overflow-hidden p-0 md:block">
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[560px]">
+                <thead>
+                  <tr className="border-b border-ink-200">
+                    <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                      Propiedad
+                    </th>
+                    <th className="whitespace-nowrap px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                      Operación
+                    </th>
+                    <th className="whitespace-nowrap px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                      Estado
+                    </th>
+                    <th className="whitespace-nowrap px-4 py-3 text-right font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                      Precio
+                    </th>
+                    <th className="hidden px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500 lg:table-cell">
+                      Dueño
+                    </th>
+                    <th className="hidden whitespace-nowrap px-4 py-3 text-right font-mono text-[10px] uppercase tracking-widest text-ink-500 xl:table-cell">
+                      Días
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </Card>
+                </thead>
+                <tbody>
+                  {propiedades.map((p: any) => (
+                    <tr
+                      key={p.id}
+                      className="border-b border-cream-200 transition-colors last:border-0 hover:bg-cream-100"
+                    >
+                      <td className="px-4 py-4">
+                        <Link
+                          href={`/propiedades/${p.id}`}
+                          className="block hover:text-brick-600"
+                        >
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="font-display text-[17px] text-ink-900">
+                              {p.direccion}
+                            </span>
+                            {p.confidencial && (
+                              <Badge tone="brick" dot={false}>
+                                Confidencial
+                              </Badge>
+                            )}
+                          </div>
+                          <div className="mt-0.5 font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                            {p.tipo}
+                          </div>
+                        </Link>
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-4 text-sm capitalize text-ink-700">
+                        {p.operacion}
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-4">
+                        <Badge tone={tonoParaEstado(p.estado)}>
+                          {p.estado.replace(/_/g, " ")}
+                        </Badge>
+                      </td>
+                      <td className="num whitespace-nowrap px-4 py-4 text-right font-display text-base text-ink-900">
+                        {formatearPrecio(p.precio_actual, p.moneda)}
+                      </td>
+                      <td className="hidden px-4 py-4 text-sm text-ink-700 lg:table-cell">
+                        {p.dueno?.nombre ?? "—"}
+                      </td>
+                      <td className="num hidden whitespace-nowrap px-4 py-4 text-right font-mono text-sm text-ink-500 xl:table-cell">
+                        {diasDesde(p.fecha_captacion)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Card>
+        </>
       )}
     </div>
   );

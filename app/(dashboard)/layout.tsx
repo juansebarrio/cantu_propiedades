@@ -18,7 +18,9 @@ export default async function DashboardLayout({
       <Sidebar />
       <div className="flex flex-1 flex-col">
         <Topbar usuario={usuario} />
-        <main className="flex-1 px-8 py-6">{children}</main>
+        <main className="flex-1 px-4 py-5 sm:px-6 sm:py-6 lg:px-8">
+          {children}
+        </main>
       </div>
     </div>
   );

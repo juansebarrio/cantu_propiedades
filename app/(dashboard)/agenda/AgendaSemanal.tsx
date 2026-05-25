@@ -86,17 +86,27 @@ export function AgendaSemanal({
 
   return (
     <>
-      <div className="mb-6 flex items-center justify-between gap-4">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-1">
-          <Button variant="secondary" size="sm" onClick={irASemanaAnterior}>
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={irASemanaAnterior}
+            aria-label="Semana anterior"
+          >
             <ChevronLeft size={14} strokeWidth={1.5} />
-            Anterior
+            <span className="hidden sm:inline">Anterior</span>
           </Button>
           <Button variant="ghost" size="sm" onClick={irAHoy}>
             Hoy
           </Button>
-          <Button variant="secondary" size="sm" onClick={irASemanaSiguiente}>
-            Siguiente
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={irASemanaSiguiente}
+            aria-label="Semana siguiente"
+          >
+            <span className="hidden sm:inline">Siguiente</span>
             <ChevronRight size={14} strokeWidth={1.5} />
           </Button>
         </div>
@@ -107,7 +117,8 @@ export function AgendaSemanal({
           onClick={() => setModalNueva({ open: true })}
         >
           <Plus size={16} strokeWidth={1.5} />
-          Nueva visita
+          <span className="hidden sm:inline">Nueva visita</span>
+          <span className="sm:hidden">Nueva</span>
         </Button>
       </div>
 

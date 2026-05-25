@@ -51,11 +51,13 @@ export function TopbarBreadcrumb() {
   const seccion = rutaLabels[seccionRaw] ?? "Inicio";
 
   return (
-    <div className="flex items-center gap-2.5 text-[13px] text-ink-500">
-      <Home size={14} strokeWidth={1.5} />
-      <span>{seccion}</span>
-      <span className="opacity-40">/</span>
-      <span className="text-ink-900">{formatearFechaHoy()}</span>
+    <div className="flex min-w-0 items-center gap-2.5 text-[13px] text-ink-500">
+      <Home size={14} strokeWidth={1.5} className="shrink-0" />
+      <span className="truncate text-ink-900 sm:text-ink-500">{seccion}</span>
+      <span className="hidden opacity-40 sm:inline">/</span>
+      <span className="hidden truncate text-ink-900 sm:inline">
+        {formatearFechaHoy()}
+      </span>
     </div>
   );
 }

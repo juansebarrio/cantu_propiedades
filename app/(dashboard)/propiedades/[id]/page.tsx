@@ -65,8 +65,8 @@ export default async function PropiedadDetalle({
         Volver a propiedades
       </Link>
 
-      <header className="mb-10 border-b border-cream-200 pb-8">
-        <div className="mb-3 flex items-center gap-2">
+      <header className="mb-6 border-b border-cream-200 pb-6 sm:mb-10 sm:pb-8">
+        <div className="mb-3 flex flex-wrap items-center gap-2">
           <Badge tone={tonoParaEstado(propiedad.estado)}>
             {propiedad.estado.replace(/_/g, " ")}
           </Badge>
@@ -74,7 +74,7 @@ export default async function PropiedadDetalle({
             <Badge tone="brick">Confidencial</Badge>
           )}
         </div>
-        <h1 className="font-display text-5xl tracking-tight text-ink-900">
+        <h1 className="font-display text-3xl tracking-tight text-ink-900 sm:text-5xl">
           {propiedad.direccion}
         </h1>
         <p className="mt-2 font-mono text-[10px] uppercase tracking-widest text-ink-500">

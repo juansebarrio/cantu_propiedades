@@ -72,9 +72,9 @@ export default async function LeadsPage({
 
   return (
     <div className="mx-auto max-w-7xl">
-      <header className="mb-8 flex items-end justify-between gap-6 border-b border-cream-200 pb-6">
+      <header className="mb-6 flex flex-wrap items-end justify-between gap-4 border-b border-cream-200 pb-5 sm:mb-8 sm:gap-6 sm:pb-6">
         <div>
-          <h1 className="font-display text-4xl tracking-tight text-ink-900">
+          <h1 className="font-display text-3xl tracking-tight text-ink-900 sm:text-4xl">
             Leads
           </h1>
           <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-ink-500">
@@ -172,100 +172,162 @@ export default async function LeadsPage({
           </div>
         </Card>
       ) : (
-        <Card className="overflow-hidden p-0">
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[640px]">
-              <thead>
-                <tr className="border-b border-ink-200">
-                  <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
-                    Lead
-                  </th>
-                  <th className="hidden whitespace-nowrap px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500 md:table-cell">
-                    Teléfono
-                  </th>
-                  <th className="hidden px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500 md:table-cell">
-                    Propiedad
-                  </th>
-                  <th className="hidden px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500 xl:table-cell">
-                    Origen
-                  </th>
-                  <th className="whitespace-nowrap px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
-                    Estado
-                  </th>
-                  <th className="hidden px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500 lg:table-cell">
-                    Responsable
-                  </th>
-                  <th className="hidden px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500 lg:table-cell">
-                    Próxima acción
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {leads.map((l: any) => (
-                  <tr
-                    key={l.id}
-                    className="border-b border-cream-200 transition-colors last:border-0 hover:bg-cream-100"
-                  >
-                    <td className="px-4 py-4">
-                      <Link
-                        href={`/leads/${l.id}`}
-                        className="block hover:text-brick-600"
-                      >
-                        <div className="font-display text-[17px] text-ink-900">
-                          {l.nombre}
+        <>
+          {/* Mobile (<md): tarjetas */}
+          <ul className="flex flex-col gap-3 md:hidden">
+            {leads.map((l: any) => (
+              <li key={l.id}>
+                <Link
+                  href={`/leads/${l.id}`}
+                  className="block rounded-md border border-ink-100 bg-white px-4 py-3.5 transition-colors hover:bg-cream-50"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate font-display text-[17px] text-ink-900">
+                        {l.nombre}
+                      </div>
+                      {l.telefono && (
+                        <div className="mt-0.5 font-mono text-xs text-ink-500">
+                          {l.telefono}
                         </div>
-                        {l.email && (
-                          <div className="mt-0.5 font-mono text-[10px] uppercase tracking-widest text-ink-500">
-                            {l.email}
-                          </div>
-                        )}
-                      </Link>
-                    </td>
-                    <td className="hidden whitespace-nowrap px-4 py-4 font-mono text-sm text-ink-700 md:table-cell">
-                      {l.telefono ?? "—"}
-                    </td>
-                    <td className="hidden px-4 py-4 text-sm text-ink-700 md:table-cell">
-                      {l.propiedad?.direccion ?? (
-                        <span className="italic text-ink-400">general</span>
                       )}
-                    </td>
-                    <td className="hidden px-4 py-4 xl:table-cell">
-                      {l.canal_origen === "referido_zulma" ? (
-                        <Badge tone="plum">Referido por Zulma</Badge>
-                      ) : (
-                        <Badge tone="slate" dot={false}>
-                          {l.canal_origen.replace(/_/g, " ")}
-                        </Badge>
-                      )}
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-4">
-                      <Badge tone={tonoParaEstado(l.estado)}>
-                        {l.estado.replace(/_/g, " ")}
-                      </Badge>
-                    </td>
-                    <td className="hidden whitespace-nowrap px-4 py-4 text-sm text-ink-700 lg:table-cell">
-                      {l.responsable?.nombre ?? "—"}
-                    </td>
-                    <td className="hidden px-4 py-4 lg:table-cell">
-                      {l.proxima_accion ? (
-                        <>
-                          <div className="text-sm text-ink-700">
-                            {l.proxima_accion}
-                          </div>
-                          <div className="whitespace-nowrap font-mono text-[10px] uppercase tracking-widest text-ink-500">
-                            {formatearFecha(l.fecha_proxima_accion)}
-                          </div>
-                        </>
-                      ) : (
-                        <span className="text-ink-400">—</span>
-                      )}
-                    </td>
+                    </div>
+                    <Badge tone={tonoParaEstado(l.estado)}>
+                      {l.estado.replace(/_/g, " ")}
+                    </Badge>
+                  </div>
+
+                  <div className="mt-2 truncate text-sm text-ink-700">
+                    {l.propiedad?.direccion ?? (
+                      <span className="italic text-ink-400">
+                        Consulta general
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="mt-2 flex flex-wrap items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                    {l.canal_origen === "referido_zulma" ? (
+                      <Badge tone="plum">Referido por Zulma</Badge>
+                    ) : (
+                      <span>{l.canal_origen.replace(/_/g, " ")}</span>
+                    )}
+                    {l.responsable?.nombre && (
+                      <>
+                        <span className="opacity-40">·</span>
+                        <span>{l.responsable.nombre}</span>
+                      </>
+                    )}
+                  </div>
+
+                  {l.proxima_accion && (
+                    <div className="mt-2 rounded-sm bg-cream-50 px-2.5 py-1.5 text-[13px] text-ink-700">
+                      <span className="font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                        {formatearFecha(l.fecha_proxima_accion)} ·{" "}
+                      </span>
+                      {l.proxima_accion}
+                    </div>
+                  )}
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          {/* md+: tabla con columnas progresivas */}
+          <Card className="hidden overflow-hidden p-0 md:block">
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[640px]">
+                <thead>
+                  <tr className="border-b border-ink-200">
+                    <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                      Lead
+                    </th>
+                    <th className="whitespace-nowrap px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                      Teléfono
+                    </th>
+                    <th className="px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                      Propiedad
+                    </th>
+                    <th className="hidden px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500 xl:table-cell">
+                      Origen
+                    </th>
+                    <th className="whitespace-nowrap px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                      Estado
+                    </th>
+                    <th className="hidden px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500 lg:table-cell">
+                      Responsable
+                    </th>
+                    <th className="hidden px-4 py-3 text-left font-mono text-[10px] uppercase tracking-widest text-ink-500 lg:table-cell">
+                      Próxima acción
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </Card>
+                </thead>
+                <tbody>
+                  {leads.map((l: any) => (
+                    <tr
+                      key={l.id}
+                      className="border-b border-cream-200 transition-colors last:border-0 hover:bg-cream-100"
+                    >
+                      <td className="px-4 py-4">
+                        <Link
+                          href={`/leads/${l.id}`}
+                          className="block hover:text-brick-600"
+                        >
+                          <div className="font-display text-[17px] text-ink-900">
+                            {l.nombre}
+                          </div>
+                          {l.email && (
+                            <div className="mt-0.5 font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                              {l.email}
+                            </div>
+                          )}
+                        </Link>
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-4 font-mono text-sm text-ink-700">
+                        {l.telefono ?? "—"}
+                      </td>
+                      <td className="px-4 py-4 text-sm text-ink-700">
+                        {l.propiedad?.direccion ?? (
+                          <span className="italic text-ink-400">general</span>
+                        )}
+                      </td>
+                      <td className="hidden px-4 py-4 xl:table-cell">
+                        {l.canal_origen === "referido_zulma" ? (
+                          <Badge tone="plum">Referido por Zulma</Badge>
+                        ) : (
+                          <Badge tone="slate" dot={false}>
+                            {l.canal_origen.replace(/_/g, " ")}
+                          </Badge>
+                        )}
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-4">
+                        <Badge tone={tonoParaEstado(l.estado)}>
+                          {l.estado.replace(/_/g, " ")}
+                        </Badge>
+                      </td>
+                      <td className="hidden whitespace-nowrap px-4 py-4 text-sm text-ink-700 lg:table-cell">
+                        {l.responsable?.nombre ?? "—"}
+                      </td>
+                      <td className="hidden px-4 py-4 lg:table-cell">
+                        {l.proxima_accion ? (
+                          <>
+                            <div className="text-sm text-ink-700">
+                              {l.proxima_accion}
+                            </div>
+                            <div className="whitespace-nowrap font-mono text-[10px] uppercase tracking-widest text-ink-500">
+                              {formatearFecha(l.fecha_proxima_accion)}
+                            </div>
+                          </>
+                        ) : (
+                          <span className="text-ink-400">—</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Card>
+        </>
       )}
     </div>
   );
